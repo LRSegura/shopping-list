@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Item Category</title>
+    <link rel="stylesheet" href="/css/customStyle.css">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/user/signup.css}">
+    <script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
+</head>
+<body>
+<div th:if="${itemCategorySaved}" class="alert alert-primary" role="alert">
+    <p>Saved</p>
+</div>
+<div th:if="${itemCategoryDuplicated}" class="alert alert-warning" role="alert">
+    <p>Duplicated entry</p>
+</div>
+<div th:if="${itemCategoryDeleted}" class="alert alert-info" role="alert">
+    <p>Deleted</p>
+</div>
+
+<div class="formStyle card">
+    <div class="card-body">
+        <h5 class="card-title">Item Category</h5>
+        <form method="post" action="/view/item/category/register">
+            <br/>
+            <div>
+                <label for="categoryName" class="col-sm-2 col-form-label">Category Name</label>
+                <input id="categoryName" type="text" class="form-control" name="category"
+                       placeholder="Enter Category Name">
+            </div>
+            <br/>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+
+<div class="formStyle card">
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Description</th>
+                <th scope="col" style="text-align: right">Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="category : ${allItemCategory}">
+                <td th:text="${category.description}"></td>
+                <td style="text-align: right">
+                    <form th:object="${category}" method="post" action="/view/item/category/delete">
+                        <input type="hidden" id="datePlanted" name="categoryId" th:value="${category.id}" />
+                        <button id="delete" type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
