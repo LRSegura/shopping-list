@@ -1,18 +1,19 @@
 package com.lab.shoppinglist.views;
 
 import com.lab.shoppinglist.services.ItemCategoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("view/item/category")
-//@Scope(value = "request")
+@Slf4j
+@Scope(value = "session")
 public class ItemCategoryController {
+
+    private ShowMessagesForm messagesForm;
 
     private final ItemCategoryService service;
 
@@ -26,27 +27,29 @@ public class ItemCategoryController {
     }
 
     @GetMapping("/register")
-    public String getItemCategoryView(Model model){
+    public String getItemCategoryView(Model model, @ModelAttribute ItemCategoryForm itemCategoryForm){
+        if(messagesForm != null){
+            model.addAttribute(messagesForm.getDescription(), true);
+        }
         model.addAttribute("allItemCategory", service.getItemCategories());
         return "item/category/itemcategory";
     }
 
     @PostMapping("/register")
-    public String postItemCategory(@RequestParam("category") String category, Model model){
-        if(service.isItemCategoryDuplicated(category)){
-            model.addAttribute("itemCategoryDuplicated", true);
-            return "item/category/itemcategory";
+    public String postItemCategory(@ModelAttribute ItemCategoryForm itemCategoryForm, Model model){
+        if(service.isItemCategoryDuplicated(itemCategoryForm.getCategoryName())){
+            messagesForm = ShowMessagesForm.DUPLICATED_ELEMENT;
+            return "redirect:/view/item/category/register";
         }
-        service.save(category);
-        model.addAttribute("allItemCategory", service.getItemCategories());
-        model.addAttribute("itemCategorySaved", true);
-        return "item/category/itemcategory";
+        service.save(itemCategoryForm.getCategoryName());
+        messagesForm = ShowMessagesForm.ADDED_ELEMENT;
+        return "redirect:/view/item/category/register";
     }
 
     @PostMapping("/delete")
     public String deleteItemCategory(@RequestParam("categoryId") String categoryId, Model model){
         service.delete(Long.parseLong(categoryId));
-        model.addAttribute("itemCategoryDeleted", true);
+        messagesForm = ShowMessagesForm.DELETED_ELEMENT;
         return "redirect:/view/item/category/register";
     }
 

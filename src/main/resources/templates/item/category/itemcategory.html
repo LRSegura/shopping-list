@@ -10,25 +10,25 @@
     <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
 </head>
 <body>
-<div th:if="${itemCategorySaved}" class="alert alert-primary" role="alert">
+<div th:if="${addedElement}" class="alert alert-primary" role="alert">
     <p>Saved</p>
 </div>
-<div th:if="${itemCategoryDuplicated}" class="alert alert-warning" role="alert">
+<div th:if="${duplicatedElement}" class="alert alert-warning" role="alert">
     <p>Duplicated entry</p>
 </div>
-<div th:if="${itemCategoryDeleted}" class="alert alert-info" role="alert">
+<div th:if="${deletedElement}" class="alert alert-info" role="alert">
     <p>Deleted</p>
 </div>
 
 <div class="formStyle card">
     <div class="card-body">
         <h5 class="card-title">Item Category</h5>
-        <form method="post" action="/view/item/category/register">
+        <form method="post" action="/view/item/category/register" th:object="${itemCategoryForm}">
             <br/>
             <div>
                 <label for="categoryName" class="col-sm-2 col-form-label">Category Name</label>
-                <input id="categoryName" type="text" class="form-control" name="category"
-                       placeholder="Enter Category Name">
+                <input id="categoryName" type="text" class="form-control"
+                       placeholder="Enter Category Name" th:field="${itemCategoryForm.categoryName}">
             </div>
             <br/>
             <button type="submit" class="btn btn-primary">Submit</button>
