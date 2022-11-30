@@ -11,13 +11,13 @@
 </head>
 <body>
 <div th:if="${addedElement}" class="alert alert-primary" role="alert">
-    <p>Saved</p>
+    <p th:text="#{item.category.added}"></p>
 </div>
 <div th:if="${duplicatedElement}" class="alert alert-warning" role="alert">
-    <p>Duplicated entry</p>
+    <p th:text="#{item.category.duplicated}"></p>
 </div>
 <div th:if="${deletedElement}" class="alert alert-info" role="alert">
-    <p>Deleted</p>
+    <p th:text="#{item.category.deleted}"></p>
 </div>
 
 <div class="formStyle card">
