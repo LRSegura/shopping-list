@@ -1,4 +1,4 @@
-package com.lab.shoppinglist.views;
+package com.lab.shoppinglist.views.item.category;
 
 import lombok.Getter;
 import lombok.Setter;

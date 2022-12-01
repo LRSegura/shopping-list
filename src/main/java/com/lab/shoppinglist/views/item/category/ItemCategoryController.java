@@ -1,6 +1,7 @@
-package com.lab.shoppinglist.views;
+package com.lab.shoppinglist.views.item.category;
 
-import com.lab.shoppinglist.services.ItemCategoryService;
+import com.lab.shoppinglist.services.item.category.ItemCategoryService;
+import com.lab.shoppinglist.views.ShowMessagesForm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -36,7 +37,7 @@ public class ItemCategoryController {
     }
 
     @PostMapping("/register")
-    public String postItemCategory(@ModelAttribute ItemCategoryForm itemCategoryForm, Model model){
+    public String postItemCategory(@ModelAttribute ItemCategoryForm itemCategoryForm){
         if(service.isItemCategoryDuplicated(itemCategoryForm.getCategoryName())){
             messagesForm = ShowMessagesForm.DUPLICATED_ELEMENT;
             return "redirect:/view/item/category/register";

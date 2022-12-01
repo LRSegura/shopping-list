@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Item</title>
+    <link rel="stylesheet" href="/css/customStyle.css">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/user/signup.css}">
+    <script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
+</head>
+<body>
+<div th:if="${addedElement}" class="alert alert-primary" role="alert">
+    <p th:text="#{item.added}"></p>
+</div>
+<div th:if="${duplicatedElement}" class="alert alert-warning" role="alert">
+    <p th:text="#{item.duplicated}"></p>
+</div>
+<div th:if="${deletedElement}" class="alert alert-info" role="alert">
+    <p th:text="#{item.deleted}"></p>
+</div>
+
+<div class="formStyle card">
+    <div class="card-body">
+        <h5 class="card-title">Item</h5>
+        <form method="post" action="/view/item/register" th:object="${itemForm}">
+            <br/>
+            <div>
+                <label for="itemName" class="col-sm-2 col-form-label">Name</label>
+                <input id="itemName" type="text" class="form-control"
+                       placeholder="Enter Item Name" th:field="${itemForm.name}">
+            </div>
+            <div>
+                <label for="itemPrice" class="col-sm-2 col-form-label">Price</label>
+                <input id="itemPrice" type="text" class="form-control"
+                       placeholder="Enter Item Price" th:field="${itemForm.price}">
+            </div>
+            <div>
+                <label for="categoryList" class="col-sm-2 col-form-label">Category</label>
+                <select class="form-control" id="categoryList" th:field="*{itemCategory}">
+                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.description}" ></option>
+                </select>
+            </div>
+            <br/>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+
+<div class="formStyle card">
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Category</th>
+                <th scope="col">Registered</th>
+                <th scope="col" style="text-align: right">Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${items}">
+                <td th:text="${item.name}"></td>
+                <td th:text="${item.price}"></td>
+                <td th:text="${item.itemCategory.description}"></td>
+                <td th:text="${item.registerDate}"></td>
+                <td style="text-align: right">
+                    <form th:object="${item}" method="post" action="/view/item/delete">
+                        <input type="hidden" id="datePlanted" name="itemId" th:value="${item.id}" />
+                        <button id="delete" type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
