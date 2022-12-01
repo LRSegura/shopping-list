@@ -1,6 +1,8 @@
 package com.lab.shoppinglist.model;
 
 
+import com.lab.shoppinglist.api.annotations.Description;
+import com.lab.shoppinglist.api.annotations.InjectedDate;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -29,6 +31,8 @@ public class Item extends AEntity {
     private ItemCategory itemCategory;
 
     @Column(name = "register_date",nullable = false)
+    @InjectedDate
+    @Description("Register Date")
     private LocalDate registerDate;
 
 }

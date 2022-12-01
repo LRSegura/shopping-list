@@ -1,5 +1,6 @@
 package com.lab.shoppinglist.model;
 
+import com.lab.shoppinglist.api.persistence.validations.HibernateEventHandlers;
 import lombok.Getter;
 import org.hibernate.Hibernate;
 
@@ -9,6 +10,7 @@ import java.util.Objects;
 
 @Getter
 @MappedSuperclass
+@EntityListeners(HibernateEventHandlers.class)
 public class AEntity implements Serializable, IEntity {
 
     @Id
