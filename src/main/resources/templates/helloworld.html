@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:ht="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>test</title>
@@ -9,16 +10,18 @@
     <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
 </head>
 <body>
-<div class="container-fluid p-5 text-center">
-    <div class="row">
-        <div class="col-3">
-            <h6>Hello response</h6>
-        </div>
-        <div class="col-3">
-            <p th:text="${value}"></p>
+<div layout:fragment="content">
+    <div class="header border-bottom"><h1 class="h2">User List</h1></div>
+    <div class="container-fluid p-5 text-center">
+        <div class="row">
+            <div class="col-3">
+                <h6>Hello response</h6>
+            </div>
+            <!--        <div class="col-3">-->
+            <!--            <p th:text="${value}"></p>-->
+            <!--        </div>-->
         </div>
     </div>
 </div>
-
 </body>
 </html>
