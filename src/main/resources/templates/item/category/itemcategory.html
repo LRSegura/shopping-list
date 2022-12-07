@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Item Category</title>
@@ -10,56 +11,60 @@
     <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
 </head>
 <body>
-<div th:if="${addedElement}" class="alert alert-primary" role="alert">
-    <p th:text="#{item.category.added}"></p>
-</div>
-<div th:if="${duplicatedElement}" class="alert alert-warning" role="alert">
-    <p th:text="#{item.category.duplicated}"></p>
-</div>
-<div th:if="${deletedElement}" class="alert alert-info" role="alert">
-    <p th:text="#{item.category.deleted}"></p>
-</div>
+<div layout:fragment="content">
+    <div class="header border-bottom"><h1 class="h2">Item Category</h1></div>
+    <div th:if="${addedElement}" class="alert alert-primary" role="alert">
+        <p th:text="#{item.category.added}"></p>
+    </div>
+    <div th:if="${duplicatedElement}" class="alert alert-warning" role="alert">
+        <p th:text="#{item.category.duplicated}"></p>
+    </div>
+    <div th:if="${deletedElement}" class="alert alert-info" role="alert">
+        <p th:text="#{item.category.deleted}"></p>
+    </div>
 
-<div class="formStyle card">
-    <div class="card-body">
-        <h5 class="card-title">Item Category</h5>
-        <form method="post" action="/view/item/category/register" th:object="${itemCategoryForm}">
-            <br/>
-            <div>
-                <label for="categoryName" class="col-sm-2 col-form-label">Category Name</label>
-                <input id="categoryName" type="text" class="form-control"
-                       placeholder="Enter Category Name" th:field="${itemCategoryForm.categoryName}">
-            </div>
-            <br/>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+    <div class="formStyle card">
+        <div class="card-body">
+<!--            <h5 class="card-title">Item Category</h5>-->
+            <form method="post" action="/view/item/category/register" th:object="${itemCategoryForm}">
+                <br/>
+                <div>
+                    <label for="categoryName" class="col-sm-2 col-form-label">Category Name</label>
+                    <input id="categoryName" type="text" class="form-control"
+                           placeholder="Enter Category Name" th:field="${itemCategoryForm.categoryName}">
+                </div>
+                <br/>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="formStyle card">
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Description</th>
+                    <th scope="col" style="text-align: right">Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="category : ${allItemCategory}">
+                    <td th:text="${category.description}"></td>
+                    <td style="text-align: right">
+                        <form th:object="${category}" method="post" action="/view/item/category/delete">
+                            <input type="hidden" id="datePlanted" name="categoryId" th:value="${category.id}" />
+                            <button id="delete" type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
-
-<div class="formStyle card">
-    <div class="card-body">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">Description</th>
-                <th scope="col" style="text-align: right">Delete</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="category : ${allItemCategory}">
-                <td th:text="${category.description}"></td>
-                <td style="text-align: right">
-                    <form th:object="${category}" method="post" action="/view/item/category/delete">
-                        <input type="hidden" id="datePlanted" name="categoryId" th:value="${category.id}" />
-                        <button id="delete" type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
 </body>
 </html>
