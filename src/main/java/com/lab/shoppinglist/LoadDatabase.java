@@ -1,6 +1,5 @@
 package com.lab.shoppinglist;
 
-import com.lab.shoppinglist.model.ItemCategory;
 import com.lab.shoppinglist.repository.ItemCategoryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

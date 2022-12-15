@@ -1,6 +1,6 @@
 package com.lab.shoppinglist.repository;
 
-import com.lab.shoppinglist.model.ItemCategory;
+import com.lab.shoppinglist.model.item.ItemCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

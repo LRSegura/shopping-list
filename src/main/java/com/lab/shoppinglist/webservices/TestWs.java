@@ -1,6 +1,6 @@
 package com.lab.shoppinglist.webservices;
 
-import com.lab.shoppinglist.model.ItemCategory;
+import com.lab.shoppinglist.model.item.ItemCategory;
 import com.lab.shoppinglist.repository.ItemCategoryRepository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

@@ -1,7 +1,5 @@
 package com.lab.shoppinglist.views.item;
 
-import com.lab.shoppinglist.model.ItemCategory;
-import com.lab.shoppinglist.services.item.ItemService;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
