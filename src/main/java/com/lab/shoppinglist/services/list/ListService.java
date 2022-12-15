@@ -63,6 +63,10 @@ public class ListService {
             detailList.setShoppingList(shoppingList);
             detailListRepository.save(detailList);
         });
+
+        itemDetailListAdded.clear();
+        itemDetailListToAdd.clear();
+        itemDetailListToAdd.addAll(getNewListDetail());
     }
 
     private List<DetailList> getNewListDetail(){
