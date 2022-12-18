@@ -20,12 +20,12 @@ import java.math.BigDecimal;
 @RequestMapping("view/list")
 @Slf4j
 @Scope(value = "session")
-public class ListController {
+public class CreateListController {
 
     private ShowMessagesForm messagesForm;
     private final ListService listService;
 
-    public ListController(ListService listService) {
+    public CreateListController(ListService listService) {
         this.listService = listService;
     }
 
@@ -38,7 +38,7 @@ public class ListController {
         model.addAttribute("listDetailAdded", listService.getItemDetailListAdded());
         model.addAttribute("total", listService.getItemDetailListAdded().stream()
                 .map(DetailList::getTotal).mapToDouble(BigDecimal::doubleValue).sum());
-        return "list/shoppingList";
+        return "list/createList";
     }
 
     @PostMapping("/register")

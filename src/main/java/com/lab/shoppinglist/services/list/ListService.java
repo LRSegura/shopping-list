@@ -31,26 +31,32 @@ public class ListService {
 
     private final List<DetailList> itemDetailListAdded;
 
+    private final List<DetailList> itemDetailListToBuy;
+
+    private final List<DetailList> itemDetailListBought;
+
     public ListService(ListRepository listRepository, ItemRepository itemRepository, DetailListRepository detailListRepository) {
         this.listRepository = listRepository;
         this.itemRepository = itemRepository;
         this.detailListRepository = detailListRepository;
         itemDetailListAdded = new ArrayList<>();
         itemDetailListToAdd = getNewListDetail();
+        itemDetailListToBuy = new ArrayList<>();
+        itemDetailListBought = new ArrayList<>();
     }
 
     @Transactional
-    public void createListByName(String listName){
-        if(itemDetailListAdded.isEmpty()){
-            throw  new ApplicationBusinessException(ErrorMessage.DETAIL_LIST_EMPTY);
+    public void createListByName(String listName) {
+        if (itemDetailListAdded.isEmpty()) {
+            throw new ApplicationBusinessException(ErrorMessage.DETAIL_LIST_EMPTY);
         }
 
-        if(listName.isEmpty() || listName.isBlank()){
-             listName = LocalDateTime.now().toString();
+        if (listName.isEmpty() || listName.isBlank()) {
+            listName = LocalDateTime.now().toString();
         }
 
-        if(listRepository.existsByName(listName)){
-            throw  new ApplicationBusinessException(ErrorMessage.DUPLICATED_LIST_NAME);
+        if (listRepository.existsByName(listName)) {
+            throw new ApplicationBusinessException(ErrorMessage.DUPLICATED_LIST_NAME);
         }
 
         BigDecimal total = BigDecimal.valueOf(itemDetailListAdded.stream().map(DetailList::getTotal).mapToDouble(BigDecimal::doubleValue).sum());
@@ -69,18 +75,18 @@ public class ListService {
         itemDetailListToAdd.addAll(getNewListDetail());
     }
 
-    private List<DetailList> getNewListDetail(){
+    private List<DetailList> getNewListDetail() {
         return itemRepository.findAll().stream().map(this::createDetailListFromItem).collect(Collectors.toList());
     }
 
-    private DetailList createDetailListFromItem(Item item){
+    private DetailList createDetailListFromItem(Item item) {
         DetailList detailList = new DetailList();
         detailList.setItem(item);
         detailList.setAmount(1);
         return detailList;
     }
 
-    public void addDetail(String amountDetail, String itemId){
+    public void addDetail(String amountDetail, String itemId) {
         Integer amount = Integer.valueOf(amountDetail);
         Long id = Long.parseLong(itemId);
         Predicate<DetailList> filter = detailList -> detailList.getItem().getId().equals(id);
@@ -94,11 +100,42 @@ public class ListService {
         itemDetailListToAdd.removeIf(filter);
     }
 
-    public void deleteDetail(String itemId){
+    public void deleteDetail(String itemId) {
         Long id = Long.parseLong(itemId);
         Predicate<DetailList> filter = detailList -> detailList.getItem().getId().equals(id);
         itemDetailListAdded.stream().filter(filter).findFirst().ifPresent(itemDetailListToAdd::add);
         itemDetailListAdded.removeIf(filter);
+    }
+
+    @Transactional
+    public void deleteList(String listId) {
+        ShoppingList shoppingList = getShoppingListById(Long.parseLong(listId));
+        List<DetailList> detailLists = detailListRepository.findDetailListByShoppingList(shoppingList);
+        detailListRepository.deleteAll(detailLists);
+        listRepository.delete(shoppingList);
+    }
+
+    public List<DetailList> getDetailListByList(String listId) {
+        ShoppingList shoppingList = getShoppingListById(Long.parseLong(listId));
+        return detailListRepository.findDetailListByShoppingList(shoppingList);
+    }
+
+    private ShoppingList getShoppingListById(Long id) {
+        return listRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Error removing list"));
+    }
+
+    public List<DetailList> findDetailListByShoppingListToBuy(String listId) {
+        ShoppingList shoppingList = getShoppingListById(Long.parseLong(listId));
+        itemDetailListToBuy.clear();
+        itemDetailListToBuy.addAll(detailListRepository.findDetailListByShoppingListAndBought(shoppingList, false));
+        return itemDetailListToBuy;
+    }
+
+    public List<DetailList> findDetailListByShoppingListBought(String listId) {
+        ShoppingList shoppingList = getShoppingListById(Long.parseLong(listId));
+        itemDetailListBought.clear();
+        itemDetailListBought.addAll(detailListRepository.findDetailListByShoppingListAndBought(shoppingList, true));
+        return itemDetailListBought;
     }
 
     public List<DetailList> getItemDetailListToAdd() {
@@ -107,5 +144,17 @@ public class ListService {
 
     public List<DetailList> getItemDetailListAdded() {
         return itemDetailListAdded;
+    }
+
+    public List<DetailList> getItemDetailListToBuy() {
+        return itemDetailListToBuy;
+    }
+
+    public List<DetailList> getItemDetailListBought() {
+        return itemDetailListBought;
+    }
+
+    public List<ShoppingList> getShoppingLists() {
+        return listRepository.findAll();
     }
 }
