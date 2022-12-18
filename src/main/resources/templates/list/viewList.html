@@ -14,15 +14,15 @@
 
 <div layout:fragment="content">
     <div class="header border-bottom"><h1 class="h2">Shopping List</h1></div>
-<!--    <div th:if="${addedElement}" class="alert alert-primary" role="alert">-->
-<!--        <p th:text="#{list.added}"></p>-->
-<!--    </div>-->
-<!--    <div th:if="${duplicatedElement}" class="alert alert-warning" role="alert">-->
-<!--        <p th:text="#{list.duplicated}"></p>-->
-<!--    </div>-->
-<!--    <div th:if="${detailListEmpty}" class="alert alert-warning" role="alert">-->
-<!--        <p th:text="#{detail.list.empty}"></p>-->
-<!--    </div>-->
+    <!--    <div th:if="${addedElement}" class="alert alert-primary" role="alert">-->
+    <!--        <p th:text="#{list.added}"></p>-->
+    <!--    </div>-->
+    <!--    <div th:if="${duplicatedElement}" class="alert alert-warning" role="alert">-->
+    <!--        <p th:text="#{list.duplicated}"></p>-->
+    <!--    </div>-->
+    <!--    <div th:if="${detailListEmpty}" class="alert alert-warning" role="alert">-->
+    <!--        <p th:text="#{detail.list.empty}"></p>-->
+    <!--    </div>-->
     <div th:if="${deletedElement}" class="alert alert-info" role="alert">
         <p th:text="#{list.deleted}"></p>
     </div>
@@ -44,7 +44,7 @@
                     <th scope="col">Name</th>
                     <th scope="col">Total</th>
                     <th scope="col">Date</th>
-<!--                    <th scope="col">Items</th>                    -->
+                    <!--                    <th scope="col">Items</th>                    -->
                 </tr>
                 </thead>
                 <tbody>
@@ -52,7 +52,7 @@
                     <td th:text="${list.name}"></td>
                     <td th:text="${list.total}"></td>
                     <td th:text="${list.registerDate}"></td>
-<!--                    <td th:text="${detail.amount}"></td>                    -->
+                    <!--                    <td th:text="${detail.amount}"></td>                    -->
                     <form th:object="${list}" method="post" action="/view/list/viewDetailList">
                         <input type="hidden" id="listIdView" name="listIdView" th:value="${list.id}"/>
                         <td>

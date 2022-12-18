@@ -41,7 +41,7 @@ public class ViewListController {
     }
 
     @PostMapping("/deleteList")
-    public String deleteDetail(@RequestParam("listId") String listId){
+    public String deleteDetail(@RequestParam("listIdDelete") String listId){
         listService.deleteList(listId);
         messagesForm = ShowMessagesForm.DELETED_ELEMENT;
         return "redirect:/view/list/viewAllList";
