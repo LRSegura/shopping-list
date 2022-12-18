@@ -1,5 +1,7 @@
-package com.lab.shoppinglist.model;
+package com.lab.shoppinglist.model.list;
 
+import com.lab.shoppinglist.model.AEntity;
+import com.lab.shoppinglist.model.item.Item;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,7 +14,7 @@ import java.math.BigDecimal;
 @ToString
 @Entity
 @Table(name = "detail_list")
-public class DetailList extends AEntity{
+public class DetailList extends AEntity {
 
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)

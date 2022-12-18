@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping List</title>
+    <link rel="stylesheet" href="/css/customStyle.css">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/user/signup.css}">
+    <script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="header border-bottom"><h1 class="h2">Shopping List</h1></div>
+    <div th:if="${addedElement}" class="alert alert-primary" role="alert">
+        <p th:text="#{list.added}"></p>
+    </div>
+    <div th:if="${duplicatedElement}" class="alert alert-warning" role="alert">
+        <p th:text="#{list.duplicated}"></p>
+    </div>
+    <div th:if="${detailListEmpty}" class="alert alert-warning" role="alert">
+        <p th:text="#{detail.list.empty}"></p>
+    </div>
+    <div th:if="${deletedElement}" class="alert alert-info" role="alert">
+        <p th:text="#{list.deleted}"></p>
+    </div>
+
+
+    <form method="get" action="/view/list/viewAllList">
+        <button id="back" type="submit" class="btn btn-primary">Back</button>
+    </form>
+
+    <div class="formStyle card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5 class="card-title">To buy</h5>
+                </div>
+                <div class="col" style="text-align: right;">
+                    <h5>Total</h5>
+                    <p th:text="${totalToBuy}"></p>
+                </div>
+            </div>
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Total</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="detail : ${detailListToBuy}">
+                    <td th:text="${detail.item.name}"></td>
+                    <td th:text="${detail.item.price}"></td>
+                    <td th:text="${detail.amount}"></td>
+                    <td th:text="${detail.total}"></td>
+                    <form th:object="${detail}" method="post" action="/view/detailList/buyDetailList">
+                        <input type="hidden" id="detailIdBuy" name="detailIdBuy" th:value="${detail.id}"/>
+                        <input type="hidden" id="listIdBuy" name="listIdBuy" th:value="${detail.shoppingList.id}"/>
+                        <td>
+                            <button id="buyDetail" type="submit" class="btn btn-info">Buy</button>
+                        </td>
+                    </form>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="formStyle card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5 class="card-title">Bought</h5>
+                </div>
+                <div class="col" style="text-align: right;">
+                    <h5>Total</h5>
+                    <p th:text="${totalBought}"></p>
+                </div>
+            </div>
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Total</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="detail : ${detailListBought}">
+                    <td th:text="${detail.item.name}"></td>
+                    <td th:text="${detail.item.price}"></td>
+                    <td th:text="${detail.amount}"></td>
+                    <td th:text="${detail.total}"></td>
+                    <form th:object="${detail}" method="post" action="/view/detailList/cancelDetailList">
+                        <input type="hidden" id="detailIdCancel" name="detailIdCancel" th:value="${detail.id}"/>
+                        <input type="hidden" id="listIdCancel" name="listIdCancel" th:value="${detail.shoppingList.id}"/>
+                        <td>
+                            <button id="CancelDetail" type="submit" class="btn btn-info">Cancel</button>
+                        </td>
+                    </form>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

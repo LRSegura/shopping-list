@@ -1,7 +1,7 @@
 package com.lab.shoppinglist.services.item;
 
-import com.lab.shoppinglist.model.Item;
-import com.lab.shoppinglist.model.ItemCategory;
+import com.lab.shoppinglist.model.item.Item;
+import com.lab.shoppinglist.model.item.ItemCategory;
 import com.lab.shoppinglist.repository.ItemCategoryRepository;
 import com.lab.shoppinglist.repository.ItemRepository;
 import com.lab.shoppinglist.views.item.ItemForm;
