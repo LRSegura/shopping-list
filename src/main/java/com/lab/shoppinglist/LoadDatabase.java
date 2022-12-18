@@ -1,6 +1,6 @@
 package com.lab.shoppinglist;
 
-import com.lab.shoppinglist.repository.ItemCategoryRepository;
+import com.lab.shoppinglist.repository.item.category.ItemCategoryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;

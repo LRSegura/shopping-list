@@ -1,9 +1,8 @@
-package com.lab.shoppinglist.repository;
+package com.lab.shoppinglist.repository.list.detail;
 
 import com.lab.shoppinglist.model.list.DetailList;
 import com.lab.shoppinglist.model.list.ShoppingList;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 

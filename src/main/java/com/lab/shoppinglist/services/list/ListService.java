@@ -5,9 +5,9 @@ import com.lab.shoppinglist.api.exceptions.message.ErrorMessage;
 import com.lab.shoppinglist.model.item.Item;
 import com.lab.shoppinglist.model.list.DetailList;
 import com.lab.shoppinglist.model.list.ShoppingList;
-import com.lab.shoppinglist.repository.DetailListRepository;
-import com.lab.shoppinglist.repository.ItemRepository;
-import com.lab.shoppinglist.repository.ListRepository;
+import com.lab.shoppinglist.repository.list.detail.DetailListRepository;
+import com.lab.shoppinglist.repository.item.ItemRepository;
+import com.lab.shoppinglist.repository.list.ListRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +19,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
-public class ListService {
+public class ListService extends AService{
 
     private final ListRepository listRepository;
 
@@ -31,18 +31,12 @@ public class ListService {
 
     private final List<DetailList> itemDetailListAdded;
 
-    private final List<DetailList> itemDetailListToBuy;
-
-    private final List<DetailList> itemDetailListBought;
-
     public ListService(ListRepository listRepository, ItemRepository itemRepository, DetailListRepository detailListRepository) {
         this.listRepository = listRepository;
         this.itemRepository = itemRepository;
         this.detailListRepository = detailListRepository;
         itemDetailListAdded = new ArrayList<>();
         itemDetailListToAdd = getNewListDetail();
-        itemDetailListToBuy = new ArrayList<>();
-        itemDetailListBought = new ArrayList<>();
     }
 
     @Transactional
@@ -115,27 +109,18 @@ public class ListService {
         listRepository.delete(shoppingList);
     }
 
-    public List<DetailList> getDetailListByList(String listId) {
-        ShoppingList shoppingList = getShoppingListById(Long.parseLong(listId));
-        return detailListRepository.findDetailListByShoppingList(shoppingList);
-    }
-
     private ShoppingList getShoppingListById(Long id) {
         return listRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Error removing list"));
     }
 
-    public List<DetailList> findDetailListByShoppingListToBuy(String listId) {
-        ShoppingList shoppingList = getShoppingListById(Long.parseLong(listId));
-        itemDetailListToBuy.clear();
-        itemDetailListToBuy.addAll(detailListRepository.findDetailListByShoppingListAndBought(shoppingList, false));
-        return itemDetailListToBuy;
+    @Override
+    protected ListRepository getListRepository() {
+        return listRepository;
     }
 
-    public List<DetailList> findDetailListByShoppingListBought(String listId) {
-        ShoppingList shoppingList = getShoppingListById(Long.parseLong(listId));
-        itemDetailListBought.clear();
-        itemDetailListBought.addAll(detailListRepository.findDetailListByShoppingListAndBought(shoppingList, true));
-        return itemDetailListBought;
+    @Override
+    protected DetailListRepository getDetailListRepository() {
+        return detailListRepository;
     }
 
     public List<DetailList> getItemDetailListToAdd() {
@@ -144,14 +129,6 @@ public class ListService {
 
     public List<DetailList> getItemDetailListAdded() {
         return itemDetailListAdded;
-    }
-
-    public List<DetailList> getItemDetailListToBuy() {
-        return itemDetailListToBuy;
-    }
-
-    public List<DetailList> getItemDetailListBought() {
-        return itemDetailListBought;
     }
 
     public List<ShoppingList> getShoppingLists() {

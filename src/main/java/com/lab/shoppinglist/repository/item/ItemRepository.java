@@ -1,4 +1,4 @@
-package com.lab.shoppinglist.repository;
+package com.lab.shoppinglist.repository.item;
 
 import com.lab.shoppinglist.model.item.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
     Optional<Item> findItemByName(String name);
+
 }

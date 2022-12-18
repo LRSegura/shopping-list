@@ -1,7 +1,7 @@
 package com.lab.shoppinglist.webservices;
 
 import com.lab.shoppinglist.model.item.ItemCategory;
-import com.lab.shoppinglist.repository.ItemCategoryRepository;
+import com.lab.shoppinglist.repository.item.category.ItemCategoryRepository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;

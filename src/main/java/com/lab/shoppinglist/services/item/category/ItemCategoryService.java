@@ -1,7 +1,7 @@
 package com.lab.shoppinglist.services.item.category;
 
 import com.lab.shoppinglist.model.item.ItemCategory;
-import com.lab.shoppinglist.repository.ItemCategoryRepository;
+import com.lab.shoppinglist.repository.item.category.ItemCategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,7 +1,5 @@
 package com.lab.shoppinglist.views.shoppinglist;
 
-import com.lab.shoppinglist.repository.DetailListRepository;
-import com.lab.shoppinglist.repository.ListRepository;
 import com.lab.shoppinglist.services.list.detail.DetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
