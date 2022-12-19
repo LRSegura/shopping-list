@@ -14,15 +14,6 @@
 
 <div layout:fragment="content">
     <div class="header border-bottom"><h1 class="h2">Shopping List</h1></div>
-    <!--    <div th:if="${addedElement}" class="alert alert-primary" role="alert">-->
-    <!--        <p th:text="#{list.added}"></p>-->
-    <!--    </div>-->
-    <!--    <div th:if="${duplicatedElement}" class="alert alert-warning" role="alert">-->
-    <!--        <p th:text="#{list.duplicated}"></p>-->
-    <!--    </div>-->
-    <!--    <div th:if="${detailListEmpty}" class="alert alert-warning" role="alert">-->
-    <!--        <p th:text="#{detail.list.empty}"></p>-->
-    <!--    </div>-->
     <div th:if="${deletedElement}" class="alert alert-info" role="alert">
         <p th:text="#{list.deleted}"></p>
     </div>

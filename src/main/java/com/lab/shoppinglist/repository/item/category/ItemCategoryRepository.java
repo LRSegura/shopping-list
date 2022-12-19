@@ -1,4 +1,4 @@
-package com.lab.shoppinglist.repository;
+package com.lab.shoppinglist.repository.item.category;
 
 import com.lab.shoppinglist.model.item.ItemCategory;
 import org.springframework.data.jpa.repository.JpaRepository;

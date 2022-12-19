@@ -2,8 +2,9 @@ package com.lab.shoppinglist.services.list.detail;
 
 import com.lab.shoppinglist.model.list.DetailList;
 import com.lab.shoppinglist.model.list.ShoppingList;
-import com.lab.shoppinglist.repository.DetailListRepository;
-import com.lab.shoppinglist.repository.ListRepository;
+import com.lab.shoppinglist.repository.list.detail.DetailListRepository;
+import com.lab.shoppinglist.repository.list.ListRepository;
+import com.lab.shoppinglist.services.list.AService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @Service
-public class DetailService {
+public class DetailService extends AService {
 
     private final List<DetailList> itemDetailListToBuy;
 
@@ -57,6 +58,16 @@ public class DetailService {
 
     public List<DetailList> getItemDetailListBought() {
         return itemDetailListBought;
+    }
+
+    @Override
+    protected ListRepository getListRepository() {
+        return listRepository;
+    }
+
+    @Override
+    protected DetailListRepository getDetailListRepository() {
+        return repository;
     }
 
     @Transactional

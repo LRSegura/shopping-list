@@ -54,11 +54,4 @@ public class ItemCategoryController {
         return "redirect:/view/item/category/register";
     }
 
-
-    @PostMapping("/hello")
-    public String postRequest(@RequestParam("textTest") String text, Model model){
-        model.addAttribute("value", text);
-        return "helloworld";
-    }
-
 }

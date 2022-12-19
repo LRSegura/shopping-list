@@ -1,6 +1,5 @@
 package com.lab.shoppinglist.views.shoppinglist;
 
-import com.lab.shoppinglist.model.list.DetailList;
 import com.lab.shoppinglist.services.list.ListService;
 import com.lab.shoppinglist.services.list.detail.DetailService;
 import com.lab.shoppinglist.views.ShowMessagesForm;
