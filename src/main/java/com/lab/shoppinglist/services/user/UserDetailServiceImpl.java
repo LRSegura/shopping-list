@@ -15,12 +15,8 @@ import java.util.List;
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
 
-
-//    private UserApplicationService userApplicationService;
-
     private UserRepository userRepository;
     public UserDetailServiceImpl(UserRepository userRepository) {
-//        this.userApplicationService = userApplicationService;
         this.userRepository = userRepository;
     }
 
