@@ -2,9 +2,8 @@ package com.lab.shoppinglist.services.item;
 
 import com.lab.shoppinglist.model.item.Item;
 import com.lab.shoppinglist.model.item.ItemCategory;
-import com.lab.shoppinglist.repository.item.category.ItemCategoryRepository;
 import com.lab.shoppinglist.repository.item.ItemRepository;
-import com.lab.shoppinglist.views.item.ItemForm;
+import com.lab.shoppinglist.repository.item.category.ItemCategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,31 +20,31 @@ public class ItemService {
         this.itemCategoryRepository = itemCategoryRepository;
     }
 
-    public void save(ItemForm itemForm){
-        Item item = new Item();
-        item.setName(itemForm.getName());
-        item.setPrice(itemForm.getPrice());
-        item.setItemCategory(getItemCategoryById(itemForm.getItemCategory()));
-        itemRepository.save(item);
-    }
+//    public void save(ItemForm itemForm){
+//        Item item = new Item();
+//        item.setName(itemForm.getName());
+//        item.setPrice(itemForm.getPrice());
+//        item.setItemCategory(getItemCategoryById(itemForm.getItemCategory()));
+//        itemRepository.save(item);
+//    }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         itemRepository.deleteById(id);
     }
 
-    public boolean isItemDuplicated(String name){
+    public boolean isItemDuplicated(String name) {
         return itemRepository.findItemByName(name).isPresent();
     }
 
-    public List<ItemCategory> getItemCategoryList(){
+    public List<ItemCategory> getItemCategoryList() {
         return itemCategoryRepository.findAll();
     }
 
-    public ItemCategory getItemCategoryById(Long id){
+    public ItemCategory getItemCategoryById(Long id) {
         return itemCategoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Dont exist item category with id " + id));
     }
 
-    public List<Item> getAllItems(){
+    public List<Item> getAllItems() {
         return itemRepository.findAll();
     }
 }
