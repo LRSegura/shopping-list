@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -18,16 +19,19 @@ import java.time.LocalDate;
 @ToString
 @Entity
 @Table(name = "shopping_list")
+@AttributeOverride(name = "id", column = @Column(name = "Id_Shopping_List"))
 public class ShoppingList extends AEntity {
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "Name", nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "Total", nullable = false)
     private BigDecimal total;
 
     @Column(name = "register_date",nullable = false)
     @InjectedDate
     @Description("Register Date")
     private LocalDate registerDate;
+
+
 }
