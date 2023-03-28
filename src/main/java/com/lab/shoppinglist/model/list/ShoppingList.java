@@ -1,7 +1,5 @@
 package com.lab.shoppinglist.model.list;
 
-import com.lab.shoppinglist.api.annotations.Description;
-import com.lab.shoppinglist.api.annotations.InjectedDate;
 import com.lab.shoppinglist.model.AEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -28,10 +26,16 @@ public class ShoppingList extends AEntity {
     @Column(name = "Total", nullable = false)
     private BigDecimal total;
 
-    @Column(name = "register_date",nullable = false)
-    @InjectedDate
-    @Description("Register Date")
-    private LocalDate registerDate;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ShoppingList that)) return false;
+        if (!super.equals(o)) return false;
+        return name.equals(that.name) && total.equals(that.total);
+    }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name, total);
+    }
 }

@@ -31,10 +31,6 @@ public class UserApp extends AEntity {
     private String userName;
     @Column(name = "Password", nullable = false)
     private String password;
-    @Column(name = "Register_Date", nullable = false)
-    @InjectedDate
-    @Description("Register Date")
-    private LocalDate registerDate;
 
     @Override
     public boolean equals(Object o) {
@@ -42,11 +38,11 @@ public class UserApp extends AEntity {
         if (!(o instanceof UserApp userApp)) return false;
         if (!super.equals(o)) return false;
         return firstName.equals(userApp.firstName) && lastName.equals(userApp.lastName) && userName.equals(userApp.userName)
-                && password.equals(userApp.password) && registerDate.equals(userApp.registerDate);
+                && password.equals(userApp.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), firstName, lastName, userName, password, registerDate);
+        return Objects.hash(super.hashCode(), firstName, lastName, userName, password);
     }
 }
