@@ -9,6 +9,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -25,7 +26,7 @@ public class AEntity implements Serializable, IEntity {
     @Column(name = "Register_Date", nullable = false)
     @InjectedDate
     @Description("Register Date")
-    private LocalDate registerDate;
+    private LocalDateTime registerDate;
 
     @Override
     public boolean equals(Object o) {

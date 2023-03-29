@@ -4,19 +4,15 @@ import com.code2ever.shoppinglist.api.exceptions.message.ErrorMessage;
 
 public class ApplicationBusinessException extends RuntimeException {
 
-    private final ErrorMessage errorMessage;
+    private final CharSequence errorMessage;
 
-    public ApplicationBusinessException(ErrorMessage genericMessage){
-        super(genericMessage.getDescription());
+    public ApplicationBusinessException(CharSequence genericMessage){
+        super(genericMessage.toString());
         this.errorMessage = genericMessage;
     }
 
-    public ApplicationBusinessException(ErrorMessage genericMessage, CharSequence detailMessage){
+    public ApplicationBusinessException(CharSequence genericMessage, CharSequence detailMessage){
         super(genericMessage + " " + detailMessage);
         this.errorMessage = genericMessage;
-    }
-
-    public ErrorMessage getErrorMessage() {
-        return errorMessage;
     }
 }

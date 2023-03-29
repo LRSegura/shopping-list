@@ -15,9 +15,9 @@ import java.util.Objects;
 @Setter
 @ToString
 @Entity
-@Table(name = "Item_Category")
-@AttributeOverride(name = "id", column = @Column(name = "Id_Item_Category"))
-public class ItemCategory extends AEntity {
+@Table(name = "Category")
+@AttributeOverride(name = "id", column = @Column(name = "Id_Category"))
+public class Category extends AEntity {
 
     @Column(name = "Description", nullable = false, unique = true)
     private String description;
@@ -25,7 +25,7 @@ public class ItemCategory extends AEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ItemCategory that)) return false;
+        if (!(o instanceof Category that)) return false;
         if (!super.equals(o)) return false;
         return description.equals(that.description);
     }

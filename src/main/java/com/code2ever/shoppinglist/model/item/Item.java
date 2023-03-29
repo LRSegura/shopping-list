@@ -24,8 +24,8 @@ public class Item extends AEntity {
     private BigDecimal price;
 
     @ManyToOne
-    @JoinColumn(name = "Id_Item_Category", nullable = false)
-    private ItemCategory itemCategory;
+    @JoinColumn(name = "Id_Category", nullable = false)
+    private Category category;
 
 
     @Override
@@ -33,11 +33,11 @@ public class Item extends AEntity {
         if (this == o) return true;
         if (!(o instanceof Item item)) return false;
         if (!super.equals(o)) return false;
-        return name.equals(item.name) && price.equals(item.price) && itemCategory.equals(item.itemCategory);
+        return name.equals(item.name) && price.equals(item.price) && category.equals(item.category);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, price, itemCategory);
+        return Objects.hash(super.hashCode(), name, price, category);
     }
 }

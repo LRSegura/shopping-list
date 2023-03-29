@@ -42,7 +42,7 @@ public class ListService extends AService{
     @Transactional
     public void createListByName(String listName) {
         if (itemDetailListAdded.isEmpty()) {
-            throw new ApplicationBusinessException(ErrorMessage.DETAIL_LIST_EMPTY);
+            throw new ApplicationBusinessException("");
         }
 
         if (listName.isEmpty() || listName.isBlank()) {
@@ -50,7 +50,7 @@ public class ListService extends AService{
         }
 
         if (listRepository.existsByName(listName)) {
-            throw new ApplicationBusinessException(ErrorMessage.DUPLICATED_LIST_NAME);
+            throw new ApplicationBusinessException("");
         }
 
         BigDecimal total = BigDecimal.valueOf(itemDetailListAdded.stream().map(DetailList::getTotal).mapToDouble(BigDecimal::doubleValue).sum());

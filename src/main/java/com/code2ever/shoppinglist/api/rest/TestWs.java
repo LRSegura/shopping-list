@@ -1,7 +1,7 @@
-package com.code2ever.shoppinglist.api.ws;
+package com.code2ever.shoppinglist.api.rest;
 
-import com.code2ever.shoppinglist.model.item.ItemCategory;
-import com.code2ever.shoppinglist.repository.item.category.ItemCategoryRepository;
+import com.code2ever.shoppinglist.model.item.Category;
+import com.code2ever.shoppinglist.repository.category.CategoryRepository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,14 +12,14 @@ import java.util.List;
 @RequestMapping("/api")
 public class TestWs {
 
-    private final ItemCategoryRepository repository;
+    private final CategoryRepository repository;
 
-    public TestWs(ItemCategoryRepository repository) {
+    public TestWs(CategoryRepository repository) {
         this.repository = repository;
     }
 
     @RequestMapping(value = "/categories", method = RequestMethod.GET, produces = "application/json")
-    public List<ItemCategory> getItemCategories(){
+    public List<Category> getItemCategories(){
         return repository.findAll();
     }
 

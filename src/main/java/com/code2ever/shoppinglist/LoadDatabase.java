@@ -1,6 +1,6 @@
 package com.code2ever.shoppinglist;
 
-import com.code2ever.shoppinglist.repository.item.category.ItemCategoryRepository;
+import com.code2ever.shoppinglist.repository.category.CategoryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -12,7 +12,7 @@ public class LoadDatabase {
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
     @Bean
-    CommandLineRunner initDatabase(ItemCategoryRepository repository){
+    CommandLineRunner initDatabase(CategoryRepository repository){
         return args -> {
 //            ItemCategory item1 = new ItemCategory();
 //            ItemCategory item2 = new ItemCategory();

@@ -1,9 +1,9 @@
 package com.code2ever.shoppinglist.services.item;
 
 import com.code2ever.shoppinglist.model.item.Item;
-import com.code2ever.shoppinglist.model.item.ItemCategory;
+import com.code2ever.shoppinglist.model.item.Category;
 import com.code2ever.shoppinglist.repository.item.ItemRepository;
-import com.code2ever.shoppinglist.repository.item.category.ItemCategoryRepository;
+import com.code2ever.shoppinglist.repository.category.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,11 +13,11 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
 
-    private final ItemCategoryRepository itemCategoryRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ItemService(ItemRepository itemRepository, ItemCategoryRepository itemCategoryRepository) {
+    public ItemService(ItemRepository itemRepository, CategoryRepository categoryRepository) {
         this.itemRepository = itemRepository;
-        this.itemCategoryRepository = itemCategoryRepository;
+        this.categoryRepository = categoryRepository;
     }
 
 //    public void save(ItemForm itemForm){
@@ -36,12 +36,12 @@ public class ItemService {
         return itemRepository.findItemByName(name).isPresent();
     }
 
-    public List<ItemCategory> getItemCategoryList() {
-        return itemCategoryRepository.findAll();
+    public List<Category> getItemCategoryList() {
+        return categoryRepository.findAll();
     }
 
-    public ItemCategory getItemCategoryById(Long id) {
-        return itemCategoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Dont exist item category with id " + id));
+    public Category getItemCategoryById(Long id) {
+        return categoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Dont exist item category with id " + id));
     }
 
     public List<Item> getAllItems() {
