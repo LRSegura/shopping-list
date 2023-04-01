@@ -1,56 +1,29 @@
 package com.code2ever.shoppinglist.api.rest;
 
-import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
-import org.springframework.http.HttpStatus;
+import com.code2ever.shoppinglist.api.rest.item.JsonAddItem;
+import com.code2ever.shoppinglist.api.rest.item.JsonUpdateItem;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.ws.rs.QueryParam;
 
-public interface WebService {
-
-    WebServiceOperations getWsOperations();
-
-    default ResponseEntity<Object> save(JsonData jsonResponse) {
-        try {
-            getWsOperations().save(jsonResponse);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (ApplicationBusinessException e) {
-            JsonSimpleResponse response = new JsonSimpleResponse(e.getMessage());
-            return ResponseEntity.internalServerError().body(response);
-        } catch (Exception e) {
-            JsonSimpleResponse response = new JsonSimpleResponse("Error saving the entity");
-            return ResponseEntity.internalServerError().body(response);
-        }
+public abstract class WebService implements WebServiceImplementedCrudOperations {
+    @PostMapping()
+    public ResponseEntity<Object> saveEntity(@RequestBody JsonAddItem jsonAddCategory) {
+        return save(jsonAddCategory);
+    }
+    @GetMapping()
+    public ResponseEntity<JsonResponse> getEntities() {
+        return get();
     }
 
-    default ResponseEntity<JsonResponse> getEntities() {
-        try {
-            List<? extends JsonData> entities = getWsOperations().getEntities();
-            JsonDataResponse jsonDataResponse = new JsonDataResponse(entities);
-            return ResponseEntity.ok(jsonDataResponse);
-        } catch (Exception e) {
-            JsonSimpleResponse response = new JsonSimpleResponse("Error getting entities");
-            return ResponseEntity.internalServerError().body(response);
-        }
+    @DeleteMapping()
+    public ResponseEntity<JsonResponse> deleteEntity(@QueryParam(value = "id") Long id) {
+        return delete(id);
     }
 
-    default ResponseEntity<JsonResponse> delete(Long id) {
-        try {
-            getWsOperations().delete(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            JsonSimpleResponse response = new JsonSimpleResponse("Error deleting entity");
-            return ResponseEntity.internalServerError().body(response);
-        }
-    }
-
-    default ResponseEntity<JsonResponse> update(JsonData json) {
-        try {
-            getWsOperations().update(json);
-            return ResponseEntity.accepted().build();
-        } catch (Exception e) {
-            JsonSimpleResponse response = new JsonSimpleResponse("Error updating entity");
-            return ResponseEntity.internalServerError().body(response);
-        }
+    @PutMapping()
+    public ResponseEntity<JsonResponse> updateEntity(@RequestBody JsonUpdateItem json) {
+        return update(json);
     }
 }

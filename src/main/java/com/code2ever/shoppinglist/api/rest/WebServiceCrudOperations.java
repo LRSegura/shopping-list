@@ -2,11 +2,11 @@ package com.code2ever.shoppinglist.api.rest;
 
 import java.util.List;
 
-public interface WebServiceOperations {
+public interface WebServiceCrudOperations {
 
     <T extends JsonData> void save(T jsonResponse);
 
-    List<? extends JsonData> getEntities();
+    List<? extends JsonData> get();
 
     void delete(Long id);
 

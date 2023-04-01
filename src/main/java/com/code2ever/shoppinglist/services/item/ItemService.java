@@ -2,7 +2,7 @@ package com.code2ever.shoppinglist.services.item;
 
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
 import com.code2ever.shoppinglist.api.rest.JsonData;
-import com.code2ever.shoppinglist.api.rest.WebServiceOperations;
+import com.code2ever.shoppinglist.api.rest.WebServiceCrudOperations;
 import com.code2ever.shoppinglist.api.rest.item.JsonAddItem;
 import com.code2ever.shoppinglist.api.rest.item.JsonItem;
 import com.code2ever.shoppinglist.model.item.Category;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ItemService implements WebServiceOperations {
+public class ItemService implements WebServiceCrudOperations {
 
     private final ItemRepository itemRepository;
 
@@ -39,7 +39,7 @@ public class ItemService implements WebServiceOperations {
     }
 
     @Override
-    public List<? extends JsonData> getEntities() {
+    public List<? extends JsonData> get() {
         return itemRepository.findAll().stream().map(item -> new JsonItem(item.getId(), item.getName(), item.getPrice(),
                 item.getCategory().getId())).toList();
     }
