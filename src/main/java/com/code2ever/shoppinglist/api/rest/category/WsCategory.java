@@ -1,18 +1,19 @@
 package com.code2ever.shoppinglist.api.rest.category;
 
-import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
-import com.code2ever.shoppinglist.api.rest.JsonSimpleResponse;
+import com.code2ever.shoppinglist.api.rest.JsonResponse;
+import com.code2ever.shoppinglist.model.WebService;
+import com.code2ever.shoppinglist.model.WsOperations;
 import com.code2ever.shoppinglist.services.category.CategoryService;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.ws.rs.QueryParam;
 
 @RestController
 @RequestMapping("/api")
-public class WsCategory {
+@Slf4j
+public class WsCategory implements WebService {
 
     private final CategoryService service;
 
@@ -21,17 +22,27 @@ public class WsCategory {
     }
 
     @PostMapping("category")
-    public ResponseEntity<Object> saveCategory(@RequestBody JsonCategory jsonCategory) {
-        try {
-            service.save(jsonCategory);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        }catch (ApplicationBusinessException e) {
-            JsonSimpleResponse response = new JsonSimpleResponse(e.getMessage());
-            return ResponseEntity.internalServerError().body(response);
-        }catch (Exception e) {
-            JsonSimpleResponse response = new JsonSimpleResponse("Error saving the category");
-            return ResponseEntity.internalServerError().body(response);
-        }
+    public ResponseEntity<Object> saveCategory(@RequestBody JsonAddCategory jsonAddCategory) {
+        return save(jsonAddCategory);
     }
 
+    @GetMapping("category")
+    public ResponseEntity<JsonResponse> getCategory() {
+        return getEntities();
+    }
+
+    @DeleteMapping("category")
+    public ResponseEntity<JsonResponse> deleteCategory(@QueryParam(value = "id") Long id) {
+        return delete(id);
+    }
+
+    @PutMapping("category")
+    public ResponseEntity<JsonResponse> updateCategory(@RequestBody JsonUpdateCategory json) {
+        return update(json);
+    }
+
+    @Override
+    public WsOperations getWsOperations() {
+        return service;
+    }
 }
