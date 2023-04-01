@@ -2,11 +2,10 @@ package com.code2ever.shoppinglist.services.category;
 
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
 import com.code2ever.shoppinglist.api.rest.JsonData;
-import com.code2ever.shoppinglist.api.rest.JsonResponse;
 import com.code2ever.shoppinglist.api.rest.category.JsonAddCategory;
 import com.code2ever.shoppinglist.api.rest.category.JsonCategory;
 import com.code2ever.shoppinglist.api.rest.category.JsonUpdateCategory;
-import com.code2ever.shoppinglist.model.WsOperations;
+import com.code2ever.shoppinglist.api.rest.WebServiceOperations;
 import com.code2ever.shoppinglist.model.item.Category;
 import com.code2ever.shoppinglist.repository.category.CategoryRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class CategoryService implements WsOperations {
+public class CategoryService implements WebServiceOperations {
 
     private final CategoryRepository repository;
 

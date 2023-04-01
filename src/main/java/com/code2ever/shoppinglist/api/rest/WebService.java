@@ -1,10 +1,6 @@
-package com.code2ever.shoppinglist.model;
+package com.code2ever.shoppinglist.api.rest;
 
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
-import com.code2ever.shoppinglist.api.rest.JsonData;
-import com.code2ever.shoppinglist.api.rest.JsonDataResponse;
-import com.code2ever.shoppinglist.api.rest.JsonResponse;
-import com.code2ever.shoppinglist.api.rest.JsonSimpleResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -12,7 +8,7 @@ import java.util.List;
 
 public interface WebService {
 
-    WsOperations getWsOperations();
+    WebServiceOperations getWsOperations();
 
     default ResponseEntity<Object> save(JsonData jsonResponse) {
         try {
@@ -22,7 +18,7 @@ public interface WebService {
             JsonSimpleResponse response = new JsonSimpleResponse(e.getMessage());
             return ResponseEntity.internalServerError().body(response);
         } catch (Exception e) {
-            JsonSimpleResponse response = new JsonSimpleResponse("Error saving the category");
+            JsonSimpleResponse response = new JsonSimpleResponse("Error saving the entity");
             return ResponseEntity.internalServerError().body(response);
         }
     }
@@ -33,7 +29,7 @@ public interface WebService {
             JsonDataResponse jsonDataResponse = new JsonDataResponse(entities);
             return ResponseEntity.ok(jsonDataResponse);
         } catch (Exception e) {
-            JsonSimpleResponse response = new JsonSimpleResponse("Error getting categories");
+            JsonSimpleResponse response = new JsonSimpleResponse("Error getting entities");
             return ResponseEntity.internalServerError().body(response);
         }
     }
@@ -43,7 +39,7 @@ public interface WebService {
             getWsOperations().delete(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            JsonSimpleResponse response = new JsonSimpleResponse("Error deleting category");
+            JsonSimpleResponse response = new JsonSimpleResponse("Error deleting entity");
             return ResponseEntity.internalServerError().body(response);
         }
     }
@@ -53,7 +49,7 @@ public interface WebService {
             getWsOperations().update(json);
             return ResponseEntity.accepted().build();
         } catch (Exception e) {
-            JsonSimpleResponse response = new JsonSimpleResponse("Error deleting category");
+            JsonSimpleResponse response = new JsonSimpleResponse("Error updating entity");
             return ResponseEntity.internalServerError().body(response);
         }
     }

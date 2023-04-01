@@ -1,11 +1,8 @@
-package com.code2ever.shoppinglist.model;
-
-import com.code2ever.shoppinglist.api.rest.JsonData;
-import com.code2ever.shoppinglist.api.rest.JsonResponse;
+package com.code2ever.shoppinglist.api.rest;
 
 import java.util.List;
 
-public interface WsOperations {
+public interface WebServiceOperations {
 
     <T extends JsonData> void save(T jsonResponse);
 

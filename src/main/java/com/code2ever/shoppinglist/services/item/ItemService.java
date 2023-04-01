@@ -1,15 +1,20 @@
 package com.code2ever.shoppinglist.services.item;
 
-import com.code2ever.shoppinglist.model.item.Item;
+import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
+import com.code2ever.shoppinglist.api.rest.JsonData;
+import com.code2ever.shoppinglist.api.rest.WebServiceOperations;
+import com.code2ever.shoppinglist.api.rest.item.JsonAddItem;
+import com.code2ever.shoppinglist.api.rest.item.JsonItem;
 import com.code2ever.shoppinglist.model.item.Category;
-import com.code2ever.shoppinglist.repository.item.ItemRepository;
+import com.code2ever.shoppinglist.model.item.Item;
 import com.code2ever.shoppinglist.repository.category.CategoryRepository;
+import com.code2ever.shoppinglist.repository.item.ItemRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ItemService {
+public class ItemService implements WebServiceOperations {
 
     private final ItemRepository itemRepository;
 
@@ -20,16 +25,33 @@ public class ItemService {
         this.categoryRepository = categoryRepository;
     }
 
-//    public void save(ItemForm itemForm){
-//        Item item = new Item();
-//        item.setName(itemForm.getName());
-//        item.setPrice(itemForm.getPrice());
-//        item.setItemCategory(getItemCategoryById(itemForm.getItemCategory()));
-//        itemRepository.save(item);
-//    }
+    @Override
+    public <T extends JsonData> void save(T jsonResponse) {
+        JsonAddItem jsonAddItem = (JsonAddItem) jsonResponse;
+        if (isItemDuplicated(jsonAddItem.name())) {
+            throw new ApplicationBusinessException("Item duplicated");
+        }
+        Item item = new Item();
+        item.setName(jsonAddItem.name());
+        item.setPrice(jsonAddItem.price());
+        item.setCategory(getCategoryById(jsonAddItem.idCategory()));
+        itemRepository.save(item);
+    }
 
+    @Override
+    public List<? extends JsonData> getEntities() {
+        return itemRepository.findAll().stream().map(item -> new JsonItem(item.getId(), item.getName(), item.getPrice(),
+                item.getCategory().getId())).toList();
+    }
+
+    @Override
     public void delete(Long id) {
         itemRepository.deleteById(id);
+    }
+
+    @Override
+    public <T extends JsonData> void update(T jsonResponse) {
+
     }
 
     public boolean isItemDuplicated(String name) {
@@ -40,11 +62,7 @@ public class ItemService {
         return categoryRepository.findAll();
     }
 
-    public Category getItemCategoryById(Long id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Dont exist item category with id " + id));
-    }
-
-    public List<Item> getAllItems() {
-        return itemRepository.findAll();
+    public Category getCategoryById(Long id) {
+        return categoryRepository.findById(id).orElseThrow(() -> new ApplicationBusinessException("Dont exist category with id " + id));
     }
 }
