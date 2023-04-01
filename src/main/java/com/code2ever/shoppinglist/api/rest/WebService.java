@@ -1,17 +1,16 @@
 package com.code2ever.shoppinglist.api.rest;
 
-import com.code2ever.shoppinglist.api.rest.item.JsonAddItem;
-import com.code2ever.shoppinglist.api.rest.item.JsonUpdateItem;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.QueryParam;
 
-public abstract class WebService implements WebServiceImplementedCrudOperations {
+public abstract class WebService<T extends JsonData, K extends JsonData> implements WebServiceImplementedCrudOperations {
     @PostMapping()
-    public ResponseEntity<Object> saveEntity(@RequestBody JsonAddItem jsonAddCategory) {
-        return save(jsonAddCategory);
+    public ResponseEntity<Object> saveEntity(@RequestBody T jsonAdd) {
+        return save(jsonAdd);
     }
+
     @GetMapping()
     public ResponseEntity<JsonResponse> getEntities() {
         return get();
@@ -23,7 +22,7 @@ public abstract class WebService implements WebServiceImplementedCrudOperations 
     }
 
     @PutMapping()
-    public ResponseEntity<JsonResponse> updateEntity(@RequestBody JsonUpdateItem json) {
-        return update(json);
+    public ResponseEntity<JsonResponse> updateEntity(@RequestBody K jsonUpdate) {
+        return update(jsonUpdate);
     }
 }

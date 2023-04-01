@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/item")
 @Slf4j
-public class WebServiceItem extends WebService {
+public class WebServiceItem extends WebService<JsonAddItem, JsonUpdateItem> {
     private final ItemService service;
 
     public WebServiceItem(ItemService service) {

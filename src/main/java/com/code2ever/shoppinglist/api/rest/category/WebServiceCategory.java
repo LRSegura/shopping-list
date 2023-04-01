@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/category")
 @Slf4j
-public class WebServiceCategory extends WebService {
+public class WebServiceCategory extends WebService<JsonAddCategory, JsonUpdateCategory> {
 
     private final CategoryService service;
 
