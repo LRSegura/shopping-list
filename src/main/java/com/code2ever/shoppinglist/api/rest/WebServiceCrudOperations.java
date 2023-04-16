@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface WebServiceCrudOperations {
 
-    <T extends JsonData> void save(T jsonResponse);
+    <T extends JsonAddEntity> void save(T jsonRequest);
 
     List<? extends JsonData> get();
 
     void delete(Long id);
 
-    <T extends JsonData> void update(T jsonResponse);
+    <T extends JsonUpdateEntity> void update(T jsonRequest);
 }

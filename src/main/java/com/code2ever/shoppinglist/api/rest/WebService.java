@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.QueryParam;
 
-public abstract class WebService<T extends JsonData, K extends JsonData> implements WebServiceImplementedCrudOperations {
+public abstract class WebService<T extends JsonAddEntity, K extends JsonUpdateEntity> implements WebServiceImplementedCrudOperations {
     @PostMapping()
     public ResponseEntity<Object> saveEntity(@RequestBody T jsonAdd) {
         return save(jsonAdd);

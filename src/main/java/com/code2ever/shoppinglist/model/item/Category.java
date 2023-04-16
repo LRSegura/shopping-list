@@ -1,5 +1,6 @@
 package com.code2ever.shoppinglist.model.item;
 
+import com.code2ever.shoppinglist.api.rest.category.JsonCategory;
 import com.code2ever.shoppinglist.model.AEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,5 +34,13 @@ public class Category extends AEntity {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), description);
+    }
+
+    public void update(JsonCategory category) {
+        Objects.requireNonNull(category);
+        Objects.requireNonNull(category.id());
+        if (Objects.nonNull(category.description())) {
+            description = category.description();
+        }
     }
 }

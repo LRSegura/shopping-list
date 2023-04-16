@@ -28,15 +28,19 @@ public class AEntity implements Serializable, IEntity {
     @Description("Register Date")
     private LocalDateTime registerDate;
 
+    @Version
+    @Column(name="OptLock")
+    private int version;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AEntity aEntity)) return false;
-        return id.equals(aEntity.id) && registerDate.equals(aEntity.registerDate);
+        return version == aEntity.version && Objects.equals(id, aEntity.id) && Objects.equals(registerDate, aEntity.registerDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, registerDate);
+        return Objects.hash(id, registerDate, version);
     }
 }

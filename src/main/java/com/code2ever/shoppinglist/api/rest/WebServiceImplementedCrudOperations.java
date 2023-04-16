@@ -10,9 +10,9 @@ public interface WebServiceImplementedCrudOperations {
 
     WebServiceCrudOperations getWsOperations();
 
-    default ResponseEntity<Object> save(JsonData jsonResponse) {
+    default ResponseEntity<Object> save(JsonAddEntity jsonRequest) {
         try {
-            getWsOperations().save(jsonResponse);
+            getWsOperations().save(jsonRequest);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (ApplicationBusinessException e) {
             JsonSimpleResponse response = new JsonSimpleResponse(e.getMessage());
@@ -44,9 +44,9 @@ public interface WebServiceImplementedCrudOperations {
         }
     }
 
-    default ResponseEntity<JsonResponse> update(JsonData json) {
+    default ResponseEntity<JsonResponse> update(JsonUpdateEntity jsonRequest) {
         try {
-            getWsOperations().update(json);
+            getWsOperations().update(jsonRequest);
             return ResponseEntity.accepted().build();
         } catch (Exception e) {
             JsonSimpleResponse response = new JsonSimpleResponse("Error updating entity");

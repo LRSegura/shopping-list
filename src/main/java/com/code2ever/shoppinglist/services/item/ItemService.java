@@ -1,7 +1,9 @@
 package com.code2ever.shoppinglist.services.item;
 
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
+import com.code2ever.shoppinglist.api.rest.JsonAddEntity;
 import com.code2ever.shoppinglist.api.rest.JsonData;
+import com.code2ever.shoppinglist.api.rest.JsonUpdateEntity;
 import com.code2ever.shoppinglist.api.rest.WebServiceCrudOperations;
 import com.code2ever.shoppinglist.api.rest.item.JsonAddItem;
 import com.code2ever.shoppinglist.api.rest.item.JsonItem;
@@ -26,7 +28,7 @@ public class ItemService implements WebServiceCrudOperations {
     }
 
     @Override
-    public <T extends JsonData> void save(T jsonResponse) {
+    public <T extends JsonAddEntity> void save(T jsonResponse) {
         JsonAddItem jsonAddItem = (JsonAddItem) jsonResponse;
         if (isItemDuplicated(jsonAddItem.name())) {
             throw new ApplicationBusinessException("Item duplicated");
@@ -50,7 +52,7 @@ public class ItemService implements WebServiceCrudOperations {
     }
 
     @Override
-    public <T extends JsonData> void update(T jsonResponse) {
+    public <T extends JsonUpdateEntity> void update(T jsonResponse) {
 
     }
 
