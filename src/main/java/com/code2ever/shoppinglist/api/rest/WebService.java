@@ -1,28 +1,61 @@
 package com.code2ever.shoppinglist.api.rest;
 
+import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.QueryParam;
+import java.util.List;
 
-public abstract class WebService<T extends JsonAddEntity, K extends JsonUpdateEntity> implements WebServiceImplementedCrudOperations {
-    @PostMapping()
-    public ResponseEntity<Object> saveEntity(@RequestBody T jsonAdd) {
-        return save(jsonAdd);
-    }
+public abstract class WebService<T extends JsonData> {
+
 
     @GetMapping()
-    public ResponseEntity<JsonResponse> getEntities() {
-        return get();
+    public ResponseEntity<JsonResponse> get() {
+        try {
+            List<? extends JsonData> entities = getRestCrudOperations().restGet();
+            JsonDataResponse jsonDataResponse = new JsonDataResponse(entities);
+            return ResponseEntity.ok(jsonDataResponse);
+        } catch (Exception e) {
+            JsonSimpleResponse response = new JsonSimpleResponse("Error getting entities");
+            return ResponseEntity.internalServerError().body(response);
+        }
     }
 
-    @DeleteMapping()
-    public ResponseEntity<JsonResponse> deleteEntity(@QueryParam(value = "id") Long id) {
-        return delete(id);
+    @PostMapping()
+    public ResponseEntity<Object> save(@RequestBody T json) {
+        try {
+            getRestCrudOperations().restSave(json);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (ApplicationBusinessException e) {
+            JsonSimpleResponse response = new JsonSimpleResponse(e.getMessage());
+            return ResponseEntity.internalServerError().body(response);
+        } catch (Exception e) {
+            JsonSimpleResponse response = new JsonSimpleResponse("Error saving the entity");
+            return ResponseEntity.internalServerError().body(response);
+        }
     }
 
     @PutMapping()
-    public ResponseEntity<JsonResponse> updateEntity(@RequestBody K jsonUpdate) {
-        return update(jsonUpdate);
+    public ResponseEntity<JsonResponse> update(@RequestBody T json) {
+        try {
+            getRestCrudOperations().restUpdate(json);
+            return ResponseEntity.accepted().build();
+        } catch (Exception e) {
+            JsonSimpleResponse response = new JsonSimpleResponse("Error updating entity");
+            return ResponseEntity.internalServerError().body(response);
+        }
     }
+    @DeleteMapping()
+    public ResponseEntity<JsonResponse> delete(@QueryParam(value = "id") Long id) {
+        try {
+            getRestCrudOperations().restDelete(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            JsonSimpleResponse response = new JsonSimpleResponse("Error deleting entity");
+            return ResponseEntity.internalServerError().body(response);
+        }
+    }
+    abstract public RestCrudOperations<T> getRestCrudOperations();
 }

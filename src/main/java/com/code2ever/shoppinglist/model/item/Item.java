@@ -1,6 +1,8 @@
 package com.code2ever.shoppinglist.model.item;
 
 
+import com.code2ever.shoppinglist.api.rest.category.JsonCategory;
+import com.code2ever.shoppinglist.api.rest.item.JsonItem;
 import com.code2ever.shoppinglist.model.AEntity;
 import lombok.Getter;
 import lombok.Setter;

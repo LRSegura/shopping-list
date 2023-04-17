@@ -1,23 +1,19 @@
 package com.code2ever.shoppinglist.services.category;
 
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
-import com.code2ever.shoppinglist.api.rest.JsonAddEntity;
-import com.code2ever.shoppinglist.api.rest.JsonData;
-import com.code2ever.shoppinglist.api.rest.JsonUpdateEntity;
-import com.code2ever.shoppinglist.api.rest.category.JsonAddCategory;
+import com.code2ever.shoppinglist.api.rest.RestCrudOperations;
 import com.code2ever.shoppinglist.api.rest.category.JsonCategory;
-import com.code2ever.shoppinglist.api.rest.category.JsonUpdateCategory;
-import com.code2ever.shoppinglist.api.rest.WebServiceCrudOperations;
 import com.code2ever.shoppinglist.model.item.Category;
 import com.code2ever.shoppinglist.repository.category.CategoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
-public class CategoryService implements WebServiceCrudOperations {
+public class CategoryService implements RestCrudOperations<JsonCategory> {
 
     private final CategoryRepository repository;
 
@@ -25,41 +21,41 @@ public class CategoryService implements WebServiceCrudOperations {
         this.repository = repository;
     }
 
+    @Override
+    public List<JsonCategory> restGet() {
+        return repository.findAll().stream().map(category -> new JsonCategory(category.getId(), category.getDescription())).toList();
+    }
+
+    @Override
+    public void restSave(JsonCategory jsonResponse) {
+        if (isCategoryDuplicated(jsonResponse.description())) {
+            throw new ApplicationBusinessException("Category name duplicated");
+        }
+        Category category = new Category();
+        category.setDescription(jsonResponse.description());
+        repository.save(category);
+    }
+
     public boolean isCategoryDuplicated(String description) {
         return repository.findItemCategoriesByDescription(description).isPresent();
     }
 
     @Override
-    public <T extends JsonAddEntity> void save(T jsonResponse) {
-        JsonAddCategory jsonAddCategory = (JsonAddCategory) jsonResponse;
-        if (isCategoryDuplicated(jsonAddCategory.description())) {
-            throw new ApplicationBusinessException("Category name duplicated");
+    public void restUpdate(JsonCategory jsonResponse) {
+        Objects.requireNonNull(jsonResponse.id());
+        Long id = jsonResponse.id();
+        Category category = repository.findById(jsonResponse.id()).orElseThrow(() -> {
+            String errorMessage = "Entity not found with id" + id;
+            return new ApplicationBusinessException(errorMessage);
+        });
+        if (Objects.nonNull(jsonResponse.description())) {
+            category.setDescription(jsonResponse.description());
         }
-        Category category = new Category();
-        category.setDescription(jsonAddCategory.description());
         repository.save(category);
     }
 
     @Override
-    public List<JsonCategory> get() {
-        return repository.findAll().stream().map(category -> new JsonCategory(category.getId(), category.getDescription())).toList();
-    }
-
-    @Override
-    public void delete(Long id) {
+    public void restDelete(Long id) {
         repository.deleteById(id);
-    }
-
-    @Override
-    public <T extends JsonUpdateEntity> void update(T jsonResponse) {
-        JsonUpdateCategory jsonUpdateCategory = (JsonUpdateCategory) jsonResponse;
-        Long id = jsonUpdateCategory.id();
-        String errorMessage = "Entity not found with id"+ id;
-        Category category =
-                repository.findById(jsonUpdateCategory.id()).orElseThrow(() -> new ApplicationBusinessException(errorMessage));
-        if(jsonUpdateCategory.description() != null){
-            category.setDescription(jsonUpdateCategory.description());
-        }
-        repository.save(category);
     }
 }
