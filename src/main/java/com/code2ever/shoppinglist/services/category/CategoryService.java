@@ -1,7 +1,7 @@
 package com.code2ever.shoppinglist.services.category;
 
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
-import com.code2ever.shoppinglist.api.rest.RestCrudOperations;
+import com.code2ever.shoppinglist.api.rest.model.RestCrudOperations;
 import com.code2ever.shoppinglist.api.rest.category.JsonCategory;
 import com.code2ever.shoppinglist.model.item.Category;
 import com.code2ever.shoppinglist.repository.category.CategoryRepository;

@@ -1,4 +1,4 @@
-package com.code2ever.shoppinglist.api.rest;
+package com.code2ever.shoppinglist.api.rest.model;
 
 import java.util.List;
 

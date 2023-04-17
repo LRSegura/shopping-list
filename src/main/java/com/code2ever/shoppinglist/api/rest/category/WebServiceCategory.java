@@ -1,7 +1,7 @@
 package com.code2ever.shoppinglist.api.rest.category;
 
-import com.code2ever.shoppinglist.api.rest.WebService;
-import com.code2ever.shoppinglist.api.rest.RestCrudOperations;
+import com.code2ever.shoppinglist.api.rest.model.WebService;
+import com.code2ever.shoppinglist.api.rest.model.RestCrudOperations;
 import com.code2ever.shoppinglist.services.category.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;

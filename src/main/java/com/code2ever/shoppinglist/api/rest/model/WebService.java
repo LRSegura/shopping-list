@@ -1,4 +1,4 @@
-package com.code2ever.shoppinglist.api.rest;
+package com.code2ever.shoppinglist.api.rest.model;
 
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
 import org.springframework.http.HttpStatus;

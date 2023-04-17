@@ -1,8 +1,8 @@
 package com.code2ever.shoppinglist.services.item;
 
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
-import com.code2ever.shoppinglist.api.rest.JsonData;
-import com.code2ever.shoppinglist.api.rest.RestCrudOperations;
+import com.code2ever.shoppinglist.api.rest.model.JsonData;
+import com.code2ever.shoppinglist.api.rest.model.RestCrudOperations;
 import com.code2ever.shoppinglist.api.rest.item.JsonItem;
 import com.code2ever.shoppinglist.model.item.Category;
 import com.code2ever.shoppinglist.model.item.Item;
