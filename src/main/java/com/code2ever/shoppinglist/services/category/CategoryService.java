@@ -3,6 +3,7 @@ package com.code2ever.shoppinglist.services.category;
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
 import com.code2ever.shoppinglist.api.rest.model.RestCrudOperations;
 import com.code2ever.shoppinglist.api.rest.category.JsonCategory;
+import com.code2ever.shoppinglist.api.util.UtilClass;
 import com.code2ever.shoppinglist.model.item.Category;
 import com.code2ever.shoppinglist.repository.category.CategoryRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -27,17 +28,19 @@ public class CategoryService implements RestCrudOperations<JsonCategory> {
     }
 
     @Override
-    public void restSave(JsonCategory jsonResponse) {
-        if (isCategoryDuplicated(jsonResponse.description())) {
+    public void restSave(JsonCategory json) {
+        Objects.requireNonNull(json.description());
+        UtilClass.requireNonBlankString(json.description());
+        if (isDuplicatedCategory(json.description())) {
             throw new ApplicationBusinessException("Category name duplicated");
         }
         Category category = new Category();
-        category.setDescription(jsonResponse.description());
+        category.setDescription(json.description());
         repository.save(category);
     }
 
-    public boolean isCategoryDuplicated(String description) {
-        return repository.findItemCategoriesByDescription(description).isPresent();
+    public boolean isDuplicatedCategory(String description) {
+        return repository.existsCategoryByDescription(description);
     }
 
     @Override
@@ -45,7 +48,7 @@ public class CategoryService implements RestCrudOperations<JsonCategory> {
         Objects.requireNonNull(jsonResponse.id());
         Long id = jsonResponse.id();
         Category category = repository.findById(jsonResponse.id()).orElseThrow(() -> {
-            String errorMessage = "Entity not found with id" + id;
+            String errorMessage = "Category not found with id" + id;
             return new ApplicationBusinessException(errorMessage);
         });
         if (Objects.nonNull(jsonResponse.description())) {

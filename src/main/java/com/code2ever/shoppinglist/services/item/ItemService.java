@@ -4,6 +4,7 @@ import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
 import com.code2ever.shoppinglist.api.rest.model.JsonData;
 import com.code2ever.shoppinglist.api.rest.model.RestCrudOperations;
 import com.code2ever.shoppinglist.api.rest.item.JsonItem;
+import com.code2ever.shoppinglist.api.util.UtilClass;
 import com.code2ever.shoppinglist.model.item.Category;
 import com.code2ever.shoppinglist.model.item.Item;
 import com.code2ever.shoppinglist.repository.category.CategoryRepository;
@@ -30,14 +31,18 @@ public class ItemService implements RestCrudOperations<JsonItem> {
         return itemRepository.findAll().stream().map(item -> new JsonItem(item.getId(), item.getName(), item.getPrice(), item.getCategory().getId())).toList();
     }
     @Override
-    public void restSave(JsonItem jsonResponse) {
-        if (isItemDuplicated(jsonResponse.name())) {
+    public void restSave(JsonItem json) {
+        Objects.requireNonNull(json.name());
+        UtilClass.requireNonBlankString(json.name());
+        Objects.requireNonNull(json.price());
+        Objects.requireNonNull(json.idCategory());
+        if (isDuplicatedDuplicated(json.name())) {
             throw new ApplicationBusinessException("Item duplicated");
         }
         Item item = new Item();
-        item.setName(jsonResponse.name());
-        item.setPrice(jsonResponse.price());
-        item.setCategory(getCategoryById(jsonResponse.idCategory()));
+        item.setName(json.name());
+        item.setPrice(json.price());
+        item.setCategory(getCategoryById(json.idCategory()));
         itemRepository.save(item);
     }
 
@@ -66,8 +71,8 @@ public class ItemService implements RestCrudOperations<JsonItem> {
         itemRepository.deleteById(id);
     }
 
-    public boolean isItemDuplicated(String name) {
-        return itemRepository.findItemByName(name).isPresent();
+    public boolean isDuplicatedDuplicated(String name) {
+        return itemRepository.existsByName(name);
     }
 
     public List<Category> getItemCategoryList() {

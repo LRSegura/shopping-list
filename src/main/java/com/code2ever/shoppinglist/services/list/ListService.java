@@ -1,7 +1,10 @@
 package com.code2ever.shoppinglist.services.list;
 
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
-import com.code2ever.shoppinglist.api.exceptions.message.ErrorMessage;
+import com.code2ever.shoppinglist.api.rest.list.JsonList;
+import com.code2ever.shoppinglist.api.rest.model.JsonData;
+import com.code2ever.shoppinglist.api.rest.model.RestCrudOperations;
+import com.code2ever.shoppinglist.api.util.UtilClass;
 import com.code2ever.shoppinglist.model.item.Item;
 import com.code2ever.shoppinglist.model.list.DetailList;
 import com.code2ever.shoppinglist.model.list.ShoppingList;
@@ -15,11 +18,12 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
-public class ListService extends AService{
+public class ListService implements RestCrudOperations<JsonList> {
 
     private final ListRepository listRepository;
 
@@ -114,24 +118,43 @@ public class ListService extends AService{
     }
 
     @Override
-    protected ListRepository getListRepository() {
-        return listRepository;
+    public List<? extends JsonData> restGet() {
+        return listRepository.findAll().stream().map(list -> new JsonList(list.getId(), list.getName(), list.getTotal())).toList();
     }
 
     @Override
-    protected DetailListRepository getDetailListRepository() {
-        return detailListRepository;
+    public void restSave(JsonList json) {
+        Objects.requireNonNull(json.name());
+        UtilClass.requireNonBlankString(json.name(), "The name is empty");
+        if (isDuplicatedList(json.name())) {
+            throw new ApplicationBusinessException("List name duplicated");
+        }
+        ShoppingList shoppingList = new ShoppingList();
+        shoppingList.setName(json.name());
+        shoppingList.setTotal(BigDecimal.ZERO);
+        listRepository.save(shoppingList);
     }
 
-    public List<DetailList> getItemDetailListToAdd() {
-        return itemDetailListToAdd;
+    public boolean isDuplicatedList(String name) {
+        return listRepository.existsByName(name);
     }
 
-    public List<DetailList> getItemDetailListAdded() {
-        return itemDetailListAdded;
+    @Override
+    public void restUpdate(JsonList jsonRequest) {
+        Objects.requireNonNull(jsonRequest.id());
+        Long id = jsonRequest.id();
+        ShoppingList list = listRepository.findById(id).orElseThrow(() -> {
+            String errorMessage = "List not found with id" + id;
+            return new ApplicationBusinessException(errorMessage);
+        });
+        if (Objects.nonNull(jsonRequest.name())) {
+            list.setName(jsonRequest.name());
+        }
+        listRepository.save(list);
     }
 
-    public List<ShoppingList> getShoppingLists() {
-        return listRepository.findAll();
+    @Override
+    public void restDelete(Long id) {
+        listRepository.deleteById(id);
     }
 }

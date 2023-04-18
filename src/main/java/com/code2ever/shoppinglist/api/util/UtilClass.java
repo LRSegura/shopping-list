@@ -1,11 +1,10 @@
 package com.code2ever.shoppinglist.api.util;
 
 
-
+import com.code2ever.shoppinglist.api.annotations.Description;
 import com.code2ever.shoppinglist.api.annotations.InjectedDate;
 import com.code2ever.shoppinglist.api.exceptions.EntityFieldDeclarationException;
 import com.code2ever.shoppinglist.api.exceptions.EntityFieldException;
-import com.code2ever.shoppinglist.api.annotations.Description;
 import com.code2ever.shoppinglist.api.exceptions.EntityFieldValueException;
 import com.code2ever.shoppinglist.model.AEntity;
 
@@ -22,42 +21,44 @@ public class UtilClass {
         validateEntityFieldDeclaration(entity);
         validateEntityFieldValue(entity);
     }
+
     public static <T extends AEntity> void validateEntityFieldValue(T entity) throws EntityFieldException {
         EntityFieldValueException validationException = new EntityFieldValueException();
-        BiConsumer<Field,EntityFieldException> consumer = (field , exception) -> {
+        BiConsumer<Field, EntityFieldException> consumer = (field, exception) -> {
             Description description = field.getAnnotation(Description.class);
             String messageError;
             InjectedDate injectedDate = field.getAnnotation(InjectedDate.class);
-            if(injectedDate == null){
+            if (injectedDate == null) {
                 messageError = String.format("The field '%s' is empty", description.value());
                 exception.getSpecificErrorList().add(messageError);
             }
         };
-        validateEntityField(entity,consumer,validationException);
+        validateEntityField(entity, consumer, validationException);
     }
+
     public static <T extends AEntity> void validateEntityFieldDeclaration(T entity) throws EntityFieldException {
         EntityFieldDeclarationException declarationException = new EntityFieldDeclarationException();
-        BiConsumer<Field,EntityFieldException> consumer = (field , exception) -> {
+        BiConsumer<Field, EntityFieldException> consumer = (field, exception) -> {
             Description description = field.getAnnotation(Description.class);
             String messageError;
-            if(description == null){
-                messageError= String.format("The field '%s' from the entity '%s' should have the Description Annotation",
+            if (description == null) {
+                messageError = String.format("The field '%s' from the entity '%s' should have the Description Annotation",
                         field.getName(), entity.getClass().getName());
                 exception.getSpecificErrorList().add(messageError);
             }
         };
-        validateEntityField(entity,consumer,declarationException);
+        validateEntityField(entity, consumer, declarationException);
     }
 
-    private static <T extends AEntity> void validateEntityField(T entity, BiConsumer<Field,EntityFieldException> consumer,
-                                                                      EntityFieldException exception) throws EntityFieldException {
-        for (Field field : getFieldsFromEntity(entity)){
+    private static <T extends AEntity> void validateEntityField(T entity, BiConsumer<Field, EntityFieldException> consumer,
+                                                                EntityFieldException exception) throws EntityFieldException {
+        for (Field field : getFieldsFromEntity(entity)) {
             Column column = field.getAnnotation(Column.class);
-            if(column != null && !column.name().equalsIgnoreCase("id") && !column.nullable()){
+            if (column != null && !column.name().equalsIgnoreCase("id") && !column.nullable()) {
                 field.setAccessible(true);
                 try {
                     Object value = field.get(entity);
-                    if(value == null || (value instanceof String stringValue && stringValue.isEmpty())) {
+                    if (value == null || (value instanceof String stringValue && stringValue.isEmpty())) {
                         consumer.accept(field, exception);
                     }
                 } catch (IllegalAccessException illegalAccessException) {
@@ -70,15 +71,27 @@ public class UtilClass {
         exception.throwIfThereIsSpecificError();
     }
 
-    public static  <T> Set<Field> getFieldsFromEntity(T entity){
+    public static <T> Set<Field> getFieldsFromEntity(T entity) {
         Class<?> entityClass = entity.getClass();
         Set<Field> fields = Arrays.stream(entityClass.getDeclaredFields()).collect(Collectors.toSet());
         Class<?> entityClassParent = entityClass.getSuperclass();
-        while(!entityClassParent.equals(Object.class)){
+        while (!entityClassParent.equals(Object.class)) {
             fields.addAll(Arrays.stream(entityClassParent.getDeclaredFields()).collect(Collectors.toSet()));
             entityClassParent = entityClassParent.getSuperclass();
         }
         return fields;
+    }
+
+    public static void requireNonBlankString(String string, String message) {
+        if (string.isBlank()) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    public static void requireNonBlankString(String string) {
+        if (string.isBlank()) {
+            throw new IllegalArgumentException("The passed string is empty!");
+        }
     }
 
 }
