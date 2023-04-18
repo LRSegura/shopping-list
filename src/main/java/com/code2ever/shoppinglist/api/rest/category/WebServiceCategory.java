@@ -19,7 +19,7 @@ public class WebServiceCategory extends WebService<JsonCategory> {
     }
 
     @Override
-    public RestCrudOperations<JsonCategory> getWsOperations() {
+    public RestCrudOperations<JsonCategory> getRestCrudOperations() {
         return service;
     }
 }

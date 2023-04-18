@@ -18,7 +18,7 @@ public class WebServiceItem extends WebService<JsonItem> {
     }
 
     @Override
-    public RestCrudOperations<JsonItem> getWsOperations() {
+    public RestCrudOperations<JsonItem> getRestCrudOperations() {
         return service;
     }
 }

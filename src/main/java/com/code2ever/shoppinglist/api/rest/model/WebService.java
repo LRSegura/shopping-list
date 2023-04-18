@@ -1,6 +1,9 @@
 package com.code2ever.shoppinglist.api.rest.model;
 
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
+import com.code2ever.shoppinglist.api.rest.model.response.JsonDataResponse;
+import com.code2ever.shoppinglist.api.rest.model.response.JsonResponse;
+import com.code2ever.shoppinglist.api.rest.model.response.JsonSimpleResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

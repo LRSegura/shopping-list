@@ -1,4 +1,6 @@
-package com.code2ever.shoppinglist.api.rest.model;
+package com.code2ever.shoppinglist.api.rest.model.response;
+
+import com.code2ever.shoppinglist.api.rest.model.JsonData;
 
 import java.util.Collection;
 
