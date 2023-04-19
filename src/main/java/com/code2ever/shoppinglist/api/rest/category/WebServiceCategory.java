@@ -1,7 +1,7 @@
 package com.code2ever.shoppinglist.api.rest.category;
 
-import com.code2ever.shoppinglist.api.rest.WebService;
-import com.code2ever.shoppinglist.api.rest.WebServiceCrudOperations;
+import com.code2ever.shoppinglist.api.rest.model.WebService;
+import com.code2ever.shoppinglist.api.rest.model.RestCrudOperations;
 import com.code2ever.shoppinglist.services.category.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/category")
 @Slf4j
-public class WebServiceCategory extends WebService<JsonAddCategory, JsonUpdateCategory> {
+public class WebServiceCategory extends WebService<JsonCategory> {
 
     private final CategoryService service;
 
@@ -19,7 +19,7 @@ public class WebServiceCategory extends WebService<JsonAddCategory, JsonUpdateCa
     }
 
     @Override
-    public WebServiceCrudOperations getWsOperations() {
+    public RestCrudOperations<JsonCategory> getRestCrudOperations() {
         return service;
     }
 }

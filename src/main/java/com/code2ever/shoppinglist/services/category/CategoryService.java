@@ -1,23 +1,20 @@
 package com.code2ever.shoppinglist.services.category;
 
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
-import com.code2ever.shoppinglist.api.rest.JsonAddEntity;
-import com.code2ever.shoppinglist.api.rest.JsonData;
-import com.code2ever.shoppinglist.api.rest.JsonUpdateEntity;
-import com.code2ever.shoppinglist.api.rest.category.JsonAddCategory;
+import com.code2ever.shoppinglist.api.rest.model.RestCrudOperations;
 import com.code2ever.shoppinglist.api.rest.category.JsonCategory;
-import com.code2ever.shoppinglist.api.rest.category.JsonUpdateCategory;
-import com.code2ever.shoppinglist.api.rest.WebServiceCrudOperations;
-import com.code2ever.shoppinglist.model.item.Category;
+import com.code2ever.shoppinglist.api.util.UtilClass;
+import com.code2ever.shoppinglist.model.category.Category;
 import com.code2ever.shoppinglist.repository.category.CategoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
-public class CategoryService implements WebServiceCrudOperations {
+public class CategoryService implements RestCrudOperations<JsonCategory> {
 
     private final CategoryRepository repository;
 
@@ -25,41 +22,44 @@ public class CategoryService implements WebServiceCrudOperations {
         this.repository = repository;
     }
 
-    public boolean isCategoryDuplicated(String description) {
-        return repository.findItemCategoriesByDescription(description).isPresent();
-    }
-
     @Override
-    public <T extends JsonAddEntity> void save(T jsonResponse) {
-        JsonAddCategory jsonAddCategory = (JsonAddCategory) jsonResponse;
-        if (isCategoryDuplicated(jsonAddCategory.description())) {
-            throw new ApplicationBusinessException("Category name duplicated");
-        }
-        Category category = new Category();
-        category.setDescription(jsonAddCategory.description());
-        repository.save(category);
-    }
-
-    @Override
-    public List<JsonCategory> get() {
+    public List<JsonCategory> restGet() {
         return repository.findAll().stream().map(category -> new JsonCategory(category.getId(), category.getDescription())).toList();
     }
 
     @Override
-    public void delete(Long id) {
-        repository.deleteById(id);
+    public void restSave(JsonCategory json) {
+        Objects.requireNonNull(json.description());
+        UtilClass.requireNonBlankString(json.description());
+        if (isDuplicatedCategory(json.description())) {
+            throw new ApplicationBusinessException("Category name duplicated");
+        }
+        Category category = new Category();
+        category.setDescription(json.description());
+        repository.save(category);
+    }
+
+    public boolean isDuplicatedCategory(String description) {
+        return repository.existsCategoryByDescription(description);
     }
 
     @Override
-    public <T extends JsonUpdateEntity> void update(T jsonResponse) {
-        JsonUpdateCategory jsonUpdateCategory = (JsonUpdateCategory) jsonResponse;
-        Long id = jsonUpdateCategory.id();
-        String errorMessage = "Entity not found with id"+ id;
-        Category category =
-                repository.findById(jsonUpdateCategory.id()).orElseThrow(() -> new ApplicationBusinessException(errorMessage));
-        if(jsonUpdateCategory.description() != null){
-            category.setDescription(jsonUpdateCategory.description());
+    public void restUpdate(JsonCategory jsonResponse) {
+        Objects.requireNonNull(jsonResponse.id());
+        Long id = jsonResponse.id();
+        Category category = repository.findById(jsonResponse.id()).orElseThrow(() -> {
+            String errorMessage = "Category not found with id" + id;
+            return new ApplicationBusinessException(errorMessage);
+        });
+        if (Objects.nonNull(jsonResponse.description())) {
+            category.setDescription(jsonResponse.description());
         }
         repository.save(category);
+    }
+
+    @Override
+    public void restDelete(Long id) {
+        Objects.requireNonNull(id);
+        repository.deleteById(id);
     }
 }

@@ -1,6 +1,6 @@
 package com.code2ever.shoppinglist.repository.category;
 
-import com.code2ever.shoppinglist.model.item.Category;
+import com.code2ever.shoppinglist.model.category.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Optional<Category> findItemCategoriesByDescription(String description);
-
+    boolean existsCategoryByDescription(String description);
 }

@@ -1,7 +1,8 @@
-package com.code2ever.shoppinglist.model.list;
+package com.code2ever.shoppinglist.model.detail;
 
 import com.code2ever.shoppinglist.model.AEntity;
 import com.code2ever.shoppinglist.model.item.Item;
+import com.code2ever.shoppinglist.model.list.ShoppingList;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

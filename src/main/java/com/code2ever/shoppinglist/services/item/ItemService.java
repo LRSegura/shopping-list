@@ -1,22 +1,21 @@
 package com.code2ever.shoppinglist.services.item;
 
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
-import com.code2ever.shoppinglist.api.rest.JsonAddEntity;
-import com.code2ever.shoppinglist.api.rest.JsonData;
-import com.code2ever.shoppinglist.api.rest.JsonUpdateEntity;
-import com.code2ever.shoppinglist.api.rest.WebServiceCrudOperations;
-import com.code2ever.shoppinglist.api.rest.item.JsonAddItem;
+import com.code2ever.shoppinglist.api.rest.model.JsonData;
+import com.code2ever.shoppinglist.api.rest.model.RestCrudOperations;
 import com.code2ever.shoppinglist.api.rest.item.JsonItem;
-import com.code2ever.shoppinglist.model.item.Category;
+import com.code2ever.shoppinglist.api.util.UtilClass;
+import com.code2ever.shoppinglist.model.category.Category;
 import com.code2ever.shoppinglist.model.item.Item;
 import com.code2ever.shoppinglist.repository.category.CategoryRepository;
 import com.code2ever.shoppinglist.repository.item.ItemRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
-public class ItemService implements WebServiceCrudOperations {
+public class ItemService implements RestCrudOperations<JsonItem> {
 
     private final ItemRepository itemRepository;
 
@@ -28,36 +27,53 @@ public class ItemService implements WebServiceCrudOperations {
     }
 
     @Override
-    public <T extends JsonAddEntity> void save(T jsonResponse) {
-        JsonAddItem jsonAddItem = (JsonAddItem) jsonResponse;
-        if (isItemDuplicated(jsonAddItem.name())) {
+    public List<? extends JsonData> restGet() {
+        return itemRepository.findAll().stream().map(item -> new JsonItem(item.getId(), item.getName(), item.getPrice(), item.getCategory().getId())).toList();
+    }
+    @Override
+    public void restSave(JsonItem json) {
+        Objects.requireNonNull(json.name());
+        UtilClass.requireNonBlankString(json.name());
+        Objects.requireNonNull(json.price());
+        Objects.requireNonNull(json.idCategory());
+        if (isDuplicatedDuplicated(json.name())) {
             throw new ApplicationBusinessException("Item duplicated");
         }
         Item item = new Item();
-        item.setName(jsonAddItem.name());
-        item.setPrice(jsonAddItem.price());
-        item.setCategory(getCategoryById(jsonAddItem.idCategory()));
+        item.setName(json.name());
+        item.setPrice(json.price());
+        item.setCategory(getCategoryById(json.idCategory()));
         itemRepository.save(item);
     }
 
     @Override
-    public List<? extends JsonData> get() {
-        return itemRepository.findAll().stream().map(item -> new JsonItem(item.getId(), item.getName(), item.getPrice(),
-                item.getCategory().getId())).toList();
+    public void restUpdate(JsonItem jsonResponse) {
+        Objects.requireNonNull(jsonResponse.id());
+        Long id = jsonResponse.id();
+        Item item = itemRepository.findById(id).orElseThrow(() -> {
+            String errorMessage = "There isn't exist an item with id " + id;
+            return new ApplicationBusinessException(errorMessage);
+        });
+        if (Objects.nonNull(jsonResponse.price())) {
+            item.setPrice(jsonResponse.price());
+        }
+        if (Objects.nonNull(jsonResponse.name())) {
+            item.setName(jsonResponse.name());
+        }
+        if (Objects.nonNull(jsonResponse.idCategory())) {
+            item.setCategory(getCategoryById(jsonResponse.idCategory()));
+        }
+        itemRepository.save(item);
     }
 
     @Override
-    public void delete(Long id) {
+    public void restDelete(Long id) {
+        Objects.requireNonNull(id);
         itemRepository.deleteById(id);
     }
 
-    @Override
-    public <T extends JsonUpdateEntity> void update(T jsonResponse) {
-
-    }
-
-    public boolean isItemDuplicated(String name) {
-        return itemRepository.findItemByName(name).isPresent();
+    public boolean isDuplicatedDuplicated(String name) {
+        return itemRepository.existsByName(name);
     }
 
     public List<Category> getItemCategoryList() {

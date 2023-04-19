@@ -1,6 +1,6 @@
 package com.code2ever.shoppinglist.api.rest.item;
 
-import com.code2ever.shoppinglist.api.rest.JsonData;
+import com.code2ever.shoppinglist.api.rest.model.JsonData;
 
 import java.math.BigDecimal;
 
