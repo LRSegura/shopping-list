@@ -1,4 +1,4 @@
-package com.code2ever.shoppinglist.repository.list.detail;
+package com.code2ever.shoppinglist.repository.detail;
 
 import com.code2ever.shoppinglist.model.list.DetailList;
 import com.code2ever.shoppinglist.model.list.ShoppingList;

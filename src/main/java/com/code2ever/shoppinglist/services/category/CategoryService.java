@@ -59,6 +59,7 @@ public class CategoryService implements RestCrudOperations<JsonCategory> {
 
     @Override
     public void restDelete(Long id) {
+        Objects.requireNonNull(id);
         repository.deleteById(id);
     }
 }

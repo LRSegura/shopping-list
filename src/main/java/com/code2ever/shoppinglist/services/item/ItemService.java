@@ -68,6 +68,7 @@ public class ItemService implements RestCrudOperations<JsonItem> {
 
     @Override
     public void restDelete(Long id) {
+        Objects.requireNonNull(id);
         itemRepository.deleteById(id);
     }
 

@@ -10,7 +10,7 @@ import com.code2ever.shoppinglist.model.list.DetailList;
 import com.code2ever.shoppinglist.model.list.ShoppingList;
 import com.code2ever.shoppinglist.repository.item.ItemRepository;
 import com.code2ever.shoppinglist.repository.list.ListRepository;
-import com.code2ever.shoppinglist.repository.list.detail.DetailListRepository;
+import com.code2ever.shoppinglist.repository.detail.DetailListRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -155,6 +155,7 @@ public class ListService implements RestCrudOperations<JsonList> {
 
     @Override
     public void restDelete(Long id) {
+        Objects.requireNonNull(id);
         listRepository.deleteById(id);
     }
 }
