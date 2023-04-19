@@ -1,4 +1,4 @@
-package com.code2ever.shoppinglist.model.item;
+package com.code2ever.shoppinglist.model.category;
 
 import com.code2ever.shoppinglist.model.AEntity;
 import lombok.Getter;

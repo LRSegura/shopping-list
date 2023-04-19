@@ -4,7 +4,7 @@ import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
 import com.code2ever.shoppinglist.api.rest.model.RestCrudOperations;
 import com.code2ever.shoppinglist.api.rest.category.JsonCategory;
 import com.code2ever.shoppinglist.api.util.UtilClass;
-import com.code2ever.shoppinglist.model.item.Category;
+import com.code2ever.shoppinglist.model.category.Category;
 import com.code2ever.shoppinglist.repository.category.CategoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

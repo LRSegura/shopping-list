@@ -5,7 +5,7 @@ import com.code2ever.shoppinglist.api.rest.model.JsonData;
 import com.code2ever.shoppinglist.api.rest.model.RestCrudOperations;
 import com.code2ever.shoppinglist.api.rest.item.JsonItem;
 import com.code2ever.shoppinglist.api.util.UtilClass;
-import com.code2ever.shoppinglist.model.item.Category;
+import com.code2ever.shoppinglist.model.category.Category;
 import com.code2ever.shoppinglist.model.item.Item;
 import com.code2ever.shoppinglist.repository.category.CategoryRepository;
 import com.code2ever.shoppinglist.repository.item.ItemRepository;

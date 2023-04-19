@@ -1,6 +1,5 @@
 package com.code2ever.shoppinglist.model;
 
-import com.code2ever.shoppinglist.api.annotations.Description;
 import com.code2ever.shoppinglist.api.annotations.InjectedDate;
 import com.code2ever.shoppinglist.api.persistence.validations.HibernateEventHandlers;
 import lombok.Getter;
@@ -24,7 +23,6 @@ public class AEntity implements Serializable, IEntity {
 
     @Column(name = "Register_Date", nullable = false)
     @InjectedDate
-    @Description("Register Date")
     private LocalDateTime registerDate;
 
     @Version
