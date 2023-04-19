@@ -1,14 +1,13 @@
 package com.code2ever.shoppinglist.model;
 
+import com.code2ever.shoppinglist.api.annotations.Description;
 import com.code2ever.shoppinglist.api.annotations.InjectedDate;
 import com.code2ever.shoppinglist.api.persistence.validations.HibernateEventHandlers;
-import com.code2ever.shoppinglist.api.annotations.Description;
 import lombok.Getter;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -29,7 +28,7 @@ public class AEntity implements Serializable, IEntity {
     private LocalDateTime registerDate;
 
     @Version
-    @Column(name="OptLock")
+    @Column(name = "OptLock")
     private int version;
 
     @Override
