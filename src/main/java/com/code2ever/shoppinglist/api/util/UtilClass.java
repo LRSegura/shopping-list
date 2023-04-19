@@ -26,9 +26,7 @@ public class UtilClass {
     }
 
     public static void requireNonBlankString(String string) {
-        if (string.isBlank()) {
-            throw new IllegalArgumentException("The passed string is empty!");
-        }
+        requireNonBlankString(string, "The passed string is empty!");
     }
 
 }
