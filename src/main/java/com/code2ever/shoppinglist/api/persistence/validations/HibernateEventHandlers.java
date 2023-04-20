@@ -4,7 +4,7 @@ package com.code2ever.shoppinglist.api.persistence.validations;
 import com.code2ever.shoppinglist.api.annotations.InjectedDate;
 import com.code2ever.shoppinglist.api.util.UtilClass;
 
-import javax.persistence.PrePersist;
+import jakarta.persistence.PrePersist;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 

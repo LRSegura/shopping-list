@@ -13,20 +13,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.ws.rs.QueryParam;
+import jakarta.ws.rs.QueryParam;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/detail")
 @Slf4j
-public class WebServiceItem extends WebService<JsonDetail> {
+public class WebServiceDetail extends WebService<JsonDetail> {
     private final DetailService service;
 
-    public WebServiceItem(DetailService service) {
+    public WebServiceDetail(DetailService service) {
         this.service = service;
     }
 
-    @GetMapping()
+    @GetMapping("/list")
     public ResponseEntity<JsonResponse> get(@QueryParam(value = "idList") Long idList) {
         try {
             List<? extends JsonData> entities = service.restGet(idList);

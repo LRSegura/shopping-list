@@ -1,4 +1,4 @@
-package com.code2ever.shoppinglist.config;
+package com.code2ever.shoppinglist.security.config;
 
 import org.springframework.context.annotation.Configuration;
 
