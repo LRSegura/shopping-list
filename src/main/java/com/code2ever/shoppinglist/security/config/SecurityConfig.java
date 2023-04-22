@@ -1,54 +1,54 @@
 package com.code2ever.shoppinglist.security.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CsrfFilter;
 
-//@EnableWebSecurity
+
 @Configuration
 public class SecurityConfig {
 
-//    private UserDetailsService userDetailsService;
-//
-//    public SecurityConfig(UserDetailsService userDetailsService) {
-//        this.userDetailsService = userDetailsService;
-//    }
-//
 //    @Bean
-//    public PasswordEncoder passwordEncoder(){
+//    public BCryptPasswordEncoder bCryptPasswordEncoder() {
 //        return new BCryptPasswordEncoder();
 //    }
-//
-//    @Override
-//    public void configure(WebSecurity web) throws Exception {
-//        //These resources are excluded from security
-//        web.ignoring().antMatchers("/webjars/**")
-//                .antMatchers("/css/**")
-//                .antMatchers("/js/**");
-//    }
-//
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//
-//        http.authorizeRequests().antMatchers("/login").permitAll()
-//                .antMatchers("/view/signup").permitAll()
-//                .anyRequest().authenticated();
-//
-//        http.formLogin().loginProcessingUrl("/login").loginPage("/login").failureUrl("/login?error")
-//                .usernameParameter("userId").passwordParameter("password").defaultSuccessUrl("/view/list/viewAllList",true);
-//
-//
-//        http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                .logoutUrl("/logout")
-//                .logoutSuccessUrl("/login?logout");
-//
-//        http.csrf().disable();
-//    }
-//
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        PasswordEncoder encoder = passwordEncoder();
-////        auth.inMemoryAuthentication().withUser("user").password(encoder.encode("user")).roles("GENERAL")
-////                .and().withUser("admin").password(encoder.encode("admin")).roles("ADMIN");
-//        auth.userDetailsService(userDetailsService).passwordEncoder(encoder);
-//
-//    }
+
+    //Only for test
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.httpBasic(withDefaults());
+//        http.authorizeHttpRequests((authorize) ->
+////                authorize.requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+//                        //.requestMatchers("/api/auth/**").permitAll()
+//                        authorize.anyRequest().permitAll()
+////                        .anyRequest().hasAnyAuthority("WRITE", "READ")
+//        );
+//        return http.build();
+        http.httpBasic();
+        http.addFilterAfter(new CsrfTokenLogger(), CsrfFilter.class);
+//        http.addFilterBefore(new RequestValidationFilter(), BasicAuthenticationFilter.class);
+        http.authorizeHttpRequests((authorize) -> authorize.requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll())
+                .authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated());
+
+//                        authorize.anyRequest().permitAll()
+//                        .anyRequest().hasAnyAuthority("WRITE", "READ")
+
+//        http.securityMatcher("/api/**")
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .anyRequest().hasRole("WRITE")
+//                );
+
+        return http.build();
+    }
 }
