@@ -1,5 +1,6 @@
-package com.code2ever.shoppinglist.security.config;
+package com.code2ever.shoppinglist.security.authentication;
 
+import com.code2ever.shoppinglist.security.user.JpaUserDetailsService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

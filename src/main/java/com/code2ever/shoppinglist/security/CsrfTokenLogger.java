@@ -1,4 +1,4 @@
-package com.code2ever.shoppinglist.security.config;
+package com.code2ever.shoppinglist.security;
 
 import jakarta.servlet.*;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.code2ever.shoppinglist.security.config;
+package com.code2ever.shoppinglist.security.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

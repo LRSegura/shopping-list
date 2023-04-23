@@ -1,4 +1,4 @@
-package com.code2ever.shoppinglist.security.config;
+package com.code2ever.shoppinglist.security.user;
 
 import com.code2ever.shoppinglist.model.user.UserApp;
 import com.code2ever.shoppinglist.repository.user.UserRepository;

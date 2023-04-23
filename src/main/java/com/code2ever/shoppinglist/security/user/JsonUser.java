@@ -1,4 +1,4 @@
-package com.code2ever.shoppinglist.api.rest.user;
+package com.code2ever.shoppinglist.security.user;
 
 import com.code2ever.shoppinglist.api.rest.model.JsonData;
 

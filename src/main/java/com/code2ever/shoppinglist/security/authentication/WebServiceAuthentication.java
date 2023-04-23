@@ -1,6 +1,6 @@
-package com.code2ever.shoppinglist.api.rest.user;
+package com.code2ever.shoppinglist.security.authentication;
 
-import com.code2ever.shoppinglist.security.config.AuthenticationProviderService;
+import com.code2ever.shoppinglist.security.user.JsonUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 @Slf4j
-public class WebServiceUser {
+public class WebServiceAuthentication {
 
     private final AuthenticationProviderService authenticationManager;
 
-    public WebServiceUser(AuthenticationProviderService authenticationManager) {
+    public WebServiceAuthentication(AuthenticationProviderService authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
