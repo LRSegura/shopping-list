@@ -22,9 +22,9 @@ public class WebServiceAuthentication {
 
     @PostMapping("/signing")
     public ResponseEntity<String> authenticateUser(@RequestBody JsonUser jsonUser) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                jsonUser.userName(), jsonUser.password()));
-
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(jsonUser.userName(), jsonUser.password());
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
     }
@@ -32,10 +32,5 @@ public class WebServiceAuthentication {
     @GetMapping("/csrf")
     public ResponseEntity<String> getCsrf() {
         return new ResponseEntity<>("get successfully", HttpStatus.OK);
-    }
-
-    @PostMapping("/csrf")
-    public ResponseEntity<String> postCsrf() {
-        return new ResponseEntity<>("post successfully", HttpStatus.OK);
     }
 }
