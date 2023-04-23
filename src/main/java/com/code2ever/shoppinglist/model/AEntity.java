@@ -5,7 +5,7 @@ import com.code2ever.shoppinglist.api.persistence.validations.HibernateEventHand
 import lombok.Getter;
 import lombok.ToString;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;

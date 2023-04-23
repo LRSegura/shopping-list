@@ -1,14 +1,12 @@
 package com.code2ever.shoppinglist.model.user;
 
 import com.code2ever.shoppinglist.model.AEntity;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -28,6 +26,9 @@ public class UserApp extends AEntity {
     private String userName;
     @Column(name = "Password", nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Authority> authorities;
 
     @Override
     public boolean equals(Object o) {
