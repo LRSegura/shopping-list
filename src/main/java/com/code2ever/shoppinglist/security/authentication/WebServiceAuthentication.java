@@ -64,26 +64,6 @@ public class WebServiceAuthentication {
         response.setHeader("Session", request.getSession().getId());
         return ResponseEntity.ok().build();
     }
-
-//        Cookie cookie = new Cookie("TestCookie", "valuecookie");
-//        cookie.setSecure(false);
-//        cookie.setPath("/api/auth");
-//        cookie.setMaxAge(50000);
-//        cookie.setHttpOnly(false);
-//        response.addCookie(cookie);
-//    }
-
-//        @GetMapping("/csrf")
-//    public ResponseEntity<String> getCsrf(ServletRequest request, ServletResponse response) {
-//        Object o = request.getAttribute("_csrf");
-//        CsrfToken token = (CsrfToken) o;
-//        return new ResponseEntity<>(token.getToken(), HttpStatus.OK);
-//    }
-//    XSRF-TOKEN=7c39595f-6a8a-441e-a31c-71dad31b83a4; Path=/
-
-//    record Token(String token){
-//
-//    }
 }
 
 

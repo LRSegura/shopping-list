@@ -43,10 +43,10 @@ public class DetailService implements RestCrudOperations<JsonDetail> {
 
     @Override
     public void restSave(JsonDetail json) {
-        Objects.requireNonNull(json.amount());
-        Objects.requireNonNull(json.bought());
-        Objects.requireNonNull(json.idList());
-        Objects.requireNonNull(json.idItem());
+        Objects.requireNonNull(json.amount(),"Amount cant be null");
+        Objects.requireNonNull(json.bought(),"Bought cant be null");
+        Objects.requireNonNull(json.idList(),"IdList cant be null");
+        Objects.requireNonNull(json.idItem(),"IdItem cant be null");
         DetailList detailList = new DetailList();
         ShoppingList shoppingList = getShoppingListById(json.idList());
         detailList.setShoppingList(shoppingList);
@@ -65,7 +65,7 @@ public class DetailService implements RestCrudOperations<JsonDetail> {
 
     @Override
     public void restUpdate(JsonDetail json) {
-        Objects.requireNonNull(json.id());
+        Objects.requireNonNull(json.id(),"Id cant be null");
         Item item;
         DetailList detailList = detailListRepository.findById(json.id()).orElseThrow(() -> new ApplicationBusinessException("There is no detail with " + "the id " + json.id()));
         if (Objects.nonNull(json.idItem())) {
@@ -90,7 +90,7 @@ public class DetailService implements RestCrudOperations<JsonDetail> {
 
     @Override
     public void restDelete(Long id) {
-        Objects.requireNonNull(id);
+        Objects.requireNonNull(id,"Id cant be null");
         detailListRepository.deleteById(id);
     }
 

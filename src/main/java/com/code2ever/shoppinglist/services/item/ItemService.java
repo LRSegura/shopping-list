@@ -32,10 +32,10 @@ public class ItemService implements RestCrudOperations<JsonItem> {
     }
     @Override
     public void restSave(JsonItem json) {
-        Objects.requireNonNull(json.name());
+        Objects.requireNonNull(json.name(),"Name cant be null");
         UtilClass.requireNonBlankString(json.name());
-        Objects.requireNonNull(json.price());
-        Objects.requireNonNull(json.idCategory());
+        Objects.requireNonNull(json.price(),"Price cant be null");
+        Objects.requireNonNull(json.idCategory(), "IdCategory cant be null");
         if (isDuplicatedDuplicated(json.name())) {
             throw new ApplicationBusinessException("Item duplicated");
         }
@@ -48,7 +48,7 @@ public class ItemService implements RestCrudOperations<JsonItem> {
 
     @Override
     public void restUpdate(JsonItem jsonResponse) {
-        Objects.requireNonNull(jsonResponse.id());
+        Objects.requireNonNull(jsonResponse.id(),"Id cant be null");
         Long id = jsonResponse.id();
         Item item = itemRepository.findById(id).orElseThrow(() -> {
             String errorMessage = "There isn't exist an item with id " + id;
@@ -68,7 +68,7 @@ public class ItemService implements RestCrudOperations<JsonItem> {
 
     @Override
     public void restDelete(Long id) {
-        Objects.requireNonNull(id);
+        Objects.requireNonNull(id,"Id cant be null");
         itemRepository.deleteById(id);
     }
 

@@ -29,7 +29,7 @@ public class CategoryService implements RestCrudOperations<JsonCategory> {
 
     @Override
     public void restSave(JsonCategory json) {
-        Objects.requireNonNull(json.description());
+        Objects.requireNonNull(json.description(),"Description cant be null");
         UtilClass.requireNonBlankString(json.description());
         if (isDuplicatedCategory(json.description())) {
             throw new ApplicationBusinessException("Category name duplicated");
@@ -45,7 +45,7 @@ public class CategoryService implements RestCrudOperations<JsonCategory> {
 
     @Override
     public void restUpdate(JsonCategory jsonResponse) {
-        Objects.requireNonNull(jsonResponse.id());
+        Objects.requireNonNull(jsonResponse.id(),"Id cant be null");
         Long id = jsonResponse.id();
         Category category = repository.findById(jsonResponse.id()).orElseThrow(() -> {
             String errorMessage = "Category not found with id" + id;
@@ -59,7 +59,7 @@ public class CategoryService implements RestCrudOperations<JsonCategory> {
 
     @Override
     public void restDelete(Long id) {
-        Objects.requireNonNull(id);
+        Objects.requireNonNull(id,"Id cant be null");
         repository.deleteById(id);
     }
 }

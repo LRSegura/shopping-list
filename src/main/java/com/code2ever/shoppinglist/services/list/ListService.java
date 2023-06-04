@@ -29,7 +29,7 @@ public class ListService implements RestCrudOperations<JsonList> {
 
     @Override
     public void restSave(JsonList json) {
-        Objects.requireNonNull(json.name());
+        Objects.requireNonNull(json.name(),"Name cant be null");
         UtilClass.requireNonBlankString(json.name(), "The name is empty");
         if (isDuplicatedList(json.name())) {
             throw new ApplicationBusinessException("List name duplicated");
@@ -46,7 +46,7 @@ public class ListService implements RestCrudOperations<JsonList> {
 
     @Override
     public void restUpdate(JsonList jsonRequest) {
-        Objects.requireNonNull(jsonRequest.id());
+        Objects.requireNonNull(jsonRequest.id(),"Id cant be null");
         Long id = jsonRequest.id();
         ShoppingList list = listRepository.findById(id).orElseThrow(() -> {
             String errorMessage = "List not found with id" + id;
@@ -60,7 +60,7 @@ public class ListService implements RestCrudOperations<JsonList> {
 
     @Override
     public void restDelete(Long id) {
-        Objects.requireNonNull(id);
+        Objects.requireNonNull(id,"Id cant be null");
         listRepository.deleteById(id);
     }
 }
