@@ -23,19 +23,22 @@ public class ShoppingList extends AEntity {
     @Column(name = "Name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "Total", nullable = false)
-    private BigDecimal total;
+    @Column(name = "Total_Price", nullable = false)
+    private BigDecimal totalPrice;
+
+    @Column(name = "Total_Items", nullable = false)
+    private Integer totalItems;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ShoppingList that)) return false;
+        if (!(o instanceof ShoppingList list)) return false;
         if (!super.equals(o)) return false;
-        return name.equals(that.name) && total.equals(that.total);
+        return Objects.equals(name, list.name) && Objects.equals(totalPrice, list.totalPrice) && Objects.equals(totalItems, list.totalItems);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, total);
+        return Objects.hash(super.hashCode(), name, totalPrice, totalItems);
     }
 }

@@ -10,13 +10,16 @@ import com.code2ever.shoppinglist.model.list.ShoppingList;
 import com.code2ever.shoppinglist.repository.item.ItemRepository;
 import com.code2ever.shoppinglist.repository.list.ListRepository;
 import com.code2ever.shoppinglist.repository.detail.DetailListRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
 @Service
+@Slf4j
 public class DetailService implements RestCrudOperations<JsonDetail> {
     private final DetailListRepository detailListRepository;
     private final ItemRepository itemRepository;
@@ -42,6 +45,7 @@ public class DetailService implements RestCrudOperations<JsonDetail> {
     }
 
     @Override
+    @Transactional
     public void restSave(JsonDetail json) {
         Objects.requireNonNull(json.amount(),"Amount cant be null");
         Objects.requireNonNull(json.bought(),"Bought cant be null");
@@ -57,6 +61,9 @@ public class DetailService implements RestCrudOperations<JsonDetail> {
         BigDecimal total = item.getPrice().multiply(BigDecimal.valueOf(json.amount().longValue()));
         detailList.setTotal(total);
         detailListRepository.save(detailList);
+        BigDecimal totalPriceList = detailListRepository.getTotalPriceByShoppingList(shoppingList);
+        shoppingList.setTotalPrice(totalPriceList);
+        shoppingList.setTotalItems(detailListRepository.countAllByShoppingList(shoppingList));
     }
 
     private Item getItemById(Long id) {

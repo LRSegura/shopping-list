@@ -24,7 +24,8 @@ public class ListService implements RestCrudOperations<JsonList> {
 
     @Override
     public List<? extends JsonData> restGet() {
-        return listRepository.findAll().stream().map(list -> new JsonList(list.getId(), list.getName(), list.getTotal())).toList();
+        return listRepository.findAll().stream().map(list -> new JsonList(list.getId(), list.getName(),
+                list.getTotalPrice(), list.getTotalItems())).toList();
     }
 
     @Override
@@ -36,7 +37,8 @@ public class ListService implements RestCrudOperations<JsonList> {
         }
         ShoppingList shoppingList = new ShoppingList();
         shoppingList.setName(json.name());
-        shoppingList.setTotal(BigDecimal.ZERO);
+        shoppingList.setTotalPrice(BigDecimal.ZERO);
+        shoppingList.setTotalItems(0);
         listRepository.save(shoppingList);
     }
 

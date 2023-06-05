@@ -10,9 +10,9 @@ import java.io.IOException;
 public class CsrfTokenLogger implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        Object o = request.getAttribute("_csrf");
-        CsrfToken token = (CsrfToken) o;
-        log.info("CSRF token " + token.getToken());
+//        Object o = request.getAttribute("_csrf");
+//        CsrfToken token = (CsrfToken) o;
+//        log.info("CSRF token " + token.getToken());
         chain.doFilter(request, response);
     }
 }
