@@ -3,7 +3,7 @@ package com.code2ever.shoppinglist.services.list;
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
 import com.code2ever.shoppinglist.api.rest.list.JsonList;
 import com.code2ever.shoppinglist.api.rest.model.JsonData;
-import com.code2ever.shoppinglist.api.rest.model.RestCrudOperations;
+import com.code2ever.shoppinglist.api.rest.model.CrudRestOperations;
 import com.code2ever.shoppinglist.api.util.UtilClass;
 import com.code2ever.shoppinglist.model.list.ShoppingList;
 import com.code2ever.shoppinglist.repository.list.ListRepository;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class ListService implements RestCrudOperations<JsonList> {
+public class ListService implements CrudRestOperations<JsonList> {
 
     private final ListRepository listRepository;
 

@@ -1,7 +1,7 @@
 package com.code2ever.shoppinglist.services.category;
 
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
-import com.code2ever.shoppinglist.api.rest.model.RestCrudOperations;
+import com.code2ever.shoppinglist.api.rest.model.CrudRestOperations;
 import com.code2ever.shoppinglist.api.rest.category.JsonCategory;
 import com.code2ever.shoppinglist.api.util.UtilClass;
 import com.code2ever.shoppinglist.model.category.Category;
@@ -14,7 +14,7 @@ import java.util.Objects;
 
 @Service
 @Slf4j
-public class CategoryService implements RestCrudOperations<JsonCategory> {
+public class CategoryService implements CrudRestOperations<JsonCategory> {
 
     private final CategoryRepository repository;
 

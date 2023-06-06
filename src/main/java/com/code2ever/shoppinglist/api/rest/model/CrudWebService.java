@@ -13,13 +13,13 @@ import jakarta.ws.rs.QueryParam;
 import java.util.List;
 
 @Slf4j
-public abstract class WebService<T extends JsonData> {
+public abstract class CrudWebService<T extends JsonData> {
 
 
     @GetMapping()
     public ResponseEntity<JsonResponse> get() {
         try {
-            List<? extends JsonData> entities = getRestCrudOperations().restGet();
+            List<? extends JsonData> entities = getCrudRestOperations().restGet();
             JsonDataResponse jsonDataResponse = new JsonDataResponse(entities);
             return ResponseEntity.ok(jsonDataResponse);
         } catch (Exception e) {
@@ -32,7 +32,7 @@ public abstract class WebService<T extends JsonData> {
     @PostMapping()
     public ResponseEntity<Object> save(@RequestBody T json) {
         try {
-            getRestCrudOperations().restSave(json);
+            getCrudRestOperations().restSave(json);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (ApplicationBusinessException e) {
             log.error(e.getClass().getName() +"::"+ e.getMessage());
@@ -48,7 +48,7 @@ public abstract class WebService<T extends JsonData> {
     @PutMapping()
     public ResponseEntity<JsonResponse> update(@RequestBody T json) {
         try {
-            getRestCrudOperations().restUpdate(json);
+            getCrudRestOperations().restUpdate(json);
             return ResponseEntity.accepted().build();
         } catch (Exception e) {
             log.error(e.getClass().getName() +"::"+ e.getMessage());
@@ -59,7 +59,7 @@ public abstract class WebService<T extends JsonData> {
     @DeleteMapping()
     public ResponseEntity<JsonResponse> delete(@QueryParam(value = "id") Long id) {
         try {
-            getRestCrudOperations().restDelete(id);
+            getCrudRestOperations().restDelete(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             log.error(e.getClass().getName() +"::"+ e.getMessage());
@@ -67,5 +67,5 @@ public abstract class WebService<T extends JsonData> {
             return ResponseEntity.internalServerError().body(response);
         }
     }
-    abstract public RestCrudOperations<T> getRestCrudOperations();
+    abstract public CrudRestOperations<T> getCrudRestOperations();
 }

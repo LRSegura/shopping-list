@@ -2,33 +2,38 @@ package com.code2ever.shoppinglist.services.item;
 
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
 import com.code2ever.shoppinglist.api.rest.model.JsonData;
-import com.code2ever.shoppinglist.api.rest.model.RestCrudOperations;
+import com.code2ever.shoppinglist.api.rest.model.CrudRestOperations;
 import com.code2ever.shoppinglist.api.rest.item.JsonItem;
 import com.code2ever.shoppinglist.api.util.UtilClass;
 import com.code2ever.shoppinglist.model.category.Category;
 import com.code2ever.shoppinglist.model.item.Item;
+import com.code2ever.shoppinglist.model.list.ShoppingList;
 import com.code2ever.shoppinglist.repository.category.CategoryRepository;
 import com.code2ever.shoppinglist.repository.item.ItemRepository;
+import com.code2ever.shoppinglist.repository.list.ListRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 
 @Service
-public class ItemService implements RestCrudOperations<JsonItem> {
+public class ItemService implements CrudRestOperations<JsonItem> {
 
     private final ItemRepository itemRepository;
 
     private final CategoryRepository categoryRepository;
 
-    public ItemService(ItemRepository itemRepository, CategoryRepository categoryRepository) {
+    private final ListRepository listRepository;
+
+    public ItemService(ItemRepository itemRepository, CategoryRepository categoryRepository, ListRepository listRepository) {
         this.itemRepository = itemRepository;
         this.categoryRepository = categoryRepository;
+        this.listRepository = listRepository;
     }
 
     @Override
     public List<? extends JsonData> restGet() {
-        return itemRepository.findAll().stream().map(item -> new JsonItem(item.getId(), item.getName(), item.getPrice(), item.getCategory().getId())).toList();
+        return mapItemToJson(itemRepository.findAll());
     }
     @Override
     public void restSave(JsonItem json) {
@@ -82,5 +87,19 @@ public class ItemService implements RestCrudOperations<JsonItem> {
 
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id).orElseThrow(() -> new ApplicationBusinessException("Dont exist category with id " + id));
+    }
+
+    public List<JsonItem> getItemNotInList(Long id) {
+        Objects.requireNonNull(id,"Id cant be null");
+        String messageError = "Dont exist shopping list with id " + id;
+        ShoppingList shoppingList =
+                listRepository.findById(id).orElseThrow(() -> new ApplicationBusinessException(messageError));
+        List<Item> itemList = itemRepository.getItemNotInShoppingList(shoppingList);
+        return mapItemToJson(itemList);
+    }
+
+    private List<JsonItem> mapItemToJson(List<Item> itemList){
+        return itemList.stream().map(item -> new JsonItem(item.getId(), item.getName(), item.getPrice(),
+                item.getCategory().getId())).toList();
     }
 }

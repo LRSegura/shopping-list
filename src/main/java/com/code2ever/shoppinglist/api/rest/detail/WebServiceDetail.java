@@ -1,8 +1,8 @@
 package com.code2ever.shoppinglist.api.rest.detail;
 
 import com.code2ever.shoppinglist.api.rest.model.JsonData;
-import com.code2ever.shoppinglist.api.rest.model.RestCrudOperations;
-import com.code2ever.shoppinglist.api.rest.model.WebService;
+import com.code2ever.shoppinglist.api.rest.model.CrudRestOperations;
+import com.code2ever.shoppinglist.api.rest.model.CrudWebService;
 import com.code2ever.shoppinglist.api.rest.model.response.JsonDataResponse;
 import com.code2ever.shoppinglist.api.rest.model.response.JsonResponse;
 import com.code2ever.shoppinglist.api.rest.model.response.JsonSimpleResponse;
@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/detail")
 @Slf4j
-public class WebServiceDetail extends WebService<JsonDetail> {
+public class WebServiceDetail extends CrudWebService<JsonDetail> {
     private final DetailService service;
 
     public WebServiceDetail(DetailService service) {
@@ -39,7 +39,7 @@ public class WebServiceDetail extends WebService<JsonDetail> {
     }
 
     @Override
-    public RestCrudOperations<JsonDetail> getRestCrudOperations() {
+    public CrudRestOperations<JsonDetail> getCrudRestOperations() {
         return service;
     }
 }

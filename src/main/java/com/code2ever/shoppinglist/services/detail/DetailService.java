@@ -1,9 +1,10 @@
 package com.code2ever.shoppinglist.services.detail;
 
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
+import com.code2ever.shoppinglist.api.rest.detail.JsonAddedDetail;
 import com.code2ever.shoppinglist.api.rest.detail.JsonDetail;
 import com.code2ever.shoppinglist.api.rest.model.JsonData;
-import com.code2ever.shoppinglist.api.rest.model.RestCrudOperations;
+import com.code2ever.shoppinglist.api.rest.model.CrudRestOperations;
 import com.code2ever.shoppinglist.model.item.Item;
 import com.code2ever.shoppinglist.model.detail.DetailList;
 import com.code2ever.shoppinglist.model.list.ShoppingList;
@@ -20,7 +21,7 @@ import java.util.Objects;
 
 @Service
 @Slf4j
-public class DetailService implements RestCrudOperations<JsonDetail> {
+public class DetailService implements CrudRestOperations<JsonDetail> {
     private final DetailListRepository detailListRepository;
     private final ItemRepository itemRepository;
     private final ListRepository listRepository;
@@ -37,7 +38,8 @@ public class DetailService implements RestCrudOperations<JsonDetail> {
 
     public List<? extends JsonData> restGet(Long idList) {
         ShoppingList shoppingList = getShoppingListById(idList);
-        return detailListRepository.findDetailListByShoppingList(shoppingList).stream().map(detail -> new JsonDetail(detail.getId(), detail.getItem().getId(), detail.getAmount(), detail.getBought(), detail.getShoppingList().getId())).toList();
+        return detailListRepository.findDetailListByShoppingList(shoppingList).stream().map(detail ->
+                new JsonAddedDetail(detail.getId(), detail.getItem().getName(),detail.getTotal(),detail.getAmount())).toList();
     }
 
     private ShoppingList getShoppingListById(Long id) {
@@ -96,10 +98,18 @@ public class DetailService implements RestCrudOperations<JsonDetail> {
     }
 
     @Override
+    @Transactional
     public void restDelete(Long id) {
         Objects.requireNonNull(id,"Id cant be null");
+        DetailList detailList = detailListRepository.findById(id).orElseThrow(() -> new ApplicationBusinessException(
+                "There is " +
+                "no detail " +
+                 "with the id " + id));
+        ShoppingList shoppingList = detailList.getShoppingList();
         detailListRepository.deleteById(id);
+        BigDecimal totalPriceList = detailListRepository.getTotalPriceByShoppingList(shoppingList);
+        shoppingList.setTotalPrice(totalPriceList);
+        shoppingList.setTotalItems(detailListRepository.countAllByShoppingList(shoppingList));
+
     }
-
-
 }
