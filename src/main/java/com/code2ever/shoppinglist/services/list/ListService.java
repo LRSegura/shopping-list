@@ -5,7 +5,9 @@ import com.code2ever.shoppinglist.api.rest.list.JsonList;
 import com.code2ever.shoppinglist.api.rest.model.JsonData;
 import com.code2ever.shoppinglist.api.rest.model.CrudRestOperations;
 import com.code2ever.shoppinglist.api.util.UtilClass;
+import com.code2ever.shoppinglist.model.detail.DetailList;
 import com.code2ever.shoppinglist.model.list.ShoppingList;
+import com.code2ever.shoppinglist.repository.detail.DetailListRepository;
 import com.code2ever.shoppinglist.repository.list.ListRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +19,11 @@ import java.util.Objects;
 public class ListService implements CrudRestOperations<JsonList> {
 
     private final ListRepository listRepository;
+    private final DetailListRepository detailListRepository;
 
-    public ListService(ListRepository listRepository) {
+    public ListService(ListRepository listRepository, DetailListRepository detailListRepository) {
         this.listRepository = listRepository;
+        this.detailListRepository = detailListRepository;
     }
 
     @Override
@@ -50,10 +54,7 @@ public class ListService implements CrudRestOperations<JsonList> {
     public void restUpdate(JsonList jsonRequest) {
         Objects.requireNonNull(jsonRequest.id(),"Id cant be null");
         Long id = jsonRequest.id();
-        ShoppingList list = listRepository.findById(id).orElseThrow(() -> {
-            String errorMessage = "List not found with id" + id;
-            return new ApplicationBusinessException(errorMessage);
-        });
+        ShoppingList list = getShoppingList(id);
         if (Objects.nonNull(jsonRequest.name())) {
             list.setName(jsonRequest.name());
         }
@@ -63,6 +64,16 @@ public class ListService implements CrudRestOperations<JsonList> {
     @Override
     public void restDelete(Long id) {
         Objects.requireNonNull(id,"Id cant be null");
+        ShoppingList list = getShoppingList(id);
+        List<DetailList> detailList = detailListRepository.findDetailListByShoppingList(list);
+        detailListRepository.deleteAll(detailList);
         listRepository.deleteById(id);
+    }
+
+    private ShoppingList getShoppingList(Long id){
+        return listRepository.findById(id).orElseThrow(() -> {
+            String errorMessage = "List not found with id" + id;
+            return new ApplicationBusinessException(errorMessage);
+        });
     }
 }

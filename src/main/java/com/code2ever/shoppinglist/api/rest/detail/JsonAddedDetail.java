@@ -4,5 +4,5 @@ import com.code2ever.shoppinglist.api.rest.model.JsonData;
 
 import java.math.BigDecimal;
 
-public record JsonAddedDetail(Long idDetail, String itemName, BigDecimal total, Integer amount) implements JsonData {
+public record JsonAddedDetail(Long idDetail, String itemName, BigDecimal total, Integer amount, Boolean bought)  implements JsonData {
 }

@@ -15,12 +15,7 @@ public interface DetailListRepository extends JpaRepository<DetailList,Long> {
 
     List<DetailList> findDetailListByShoppingList(ShoppingList shoppingList);
 
-//    Optional<DetailList> findDetailListById(DetailList detailList);
-
-//    List<DetailList> findDetailListByShoppingListAndBought(ShoppingList shoppingList, Boolean bought);
-
-//    @Query(value = "SELECT detail.item.name FROM DetailList detail where detail.shoppingList = :shoppingList")
-//    List<DetailList> findDetailListAddedByShoppingList(ShoppingList shoppingList);
+    List<DetailList> findDetailListByShoppingListAndBought(ShoppingList shoppingList, Boolean bought);
 
     @Query(value = "SELECT sum(total) FROM DetailList where shoppingList = :shoppingList")
     BigDecimal getTotalPriceByShoppingList(ShoppingList shoppingList);

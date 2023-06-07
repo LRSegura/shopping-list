@@ -31,6 +31,7 @@ public class DetailService implements CrudRestOperations<JsonDetail> {
         this.itemRepository = itemRepository;
         this.listRepository = listRepository;
     }
+
     @Override
     public List<? extends JsonData> restGet() {
         return detailListRepository.findAll().stream().map(detail -> new JsonDetail(detail.getId(), detail.getItem().getId(), detail.getAmount(), detail.getBought(), detail.getShoppingList().getId())).toList();
@@ -38,21 +39,54 @@ public class DetailService implements CrudRestOperations<JsonDetail> {
 
     public List<? extends JsonData> restGet(Long idList) {
         ShoppingList shoppingList = getShoppingListById(idList);
-        return detailListRepository.findDetailListByShoppingList(shoppingList).stream().map(detail ->
-                new JsonAddedDetail(detail.getId(), detail.getItem().getName(),detail.getTotal(),detail.getAmount())).toList();
+        return detailListRepository.findDetailListByShoppingList(shoppingList).stream().map(detail -> new JsonAddedDetail(detail.getId(), detail.getItem().getName(), detail.getTotal(), detail.getAmount(), detail.getBought())).toList();
+    }
+
+    public List<? extends JsonData> getDetailToBuy(Long idList) {
+        return getDetail(idList,false);
+    }
+
+    public List<? extends JsonData> getDetailBought(Long idList) {
+        return getDetail(idList,true);
+    }
+
+    private List<? extends JsonData> getDetail(Long idList, Boolean bought) {
+        ShoppingList shoppingList = getShoppingListById(idList);
+        return detailListRepository.findDetailListByShoppingListAndBought(shoppingList, bought)
+                .stream().map(detail -> new JsonAddedDetail(detail.getId(), detail.getItem().getName(), detail.getTotal(), detail.getAmount(), detail.getBought())).toList();
     }
 
     private ShoppingList getShoppingListById(Long id) {
         return listRepository.findById(id).orElseThrow(() -> new ApplicationBusinessException("There is no list with " + "the id " + id));
     }
 
+    public void buyDetail(Long idDetail){
+        checkDetailAsBought(idDetail,true);
+    }
+
+    public void cancelBuyDetail(Long idDetail){
+        checkDetailAsBought(idDetail,false);
+    }
+
+    private void checkDetailAsBought(Long idDetail, Boolean isCheck){
+        DetailList detailList = getDetailById(idDetail);
+        detailList.setBought(isCheck);
+        detailListRepository.save(detailList);
+    }
+
+    private DetailList getDetailById(Long id){
+        return detailListRepository.findById(id).orElseThrow(() -> new ApplicationBusinessException("There is no Detail " +
+                "with" +
+                "the id " + id));
+    }
+
     @Override
     @Transactional
     public void restSave(JsonDetail json) {
-        Objects.requireNonNull(json.amount(),"Amount cant be null");
-        Objects.requireNonNull(json.bought(),"Bought cant be null");
-        Objects.requireNonNull(json.idList(),"IdList cant be null");
-        Objects.requireNonNull(json.idItem(),"IdItem cant be null");
+        Objects.requireNonNull(json.amount(), "Amount cant be null");
+        Objects.requireNonNull(json.bought(), "Bought cant be null");
+        Objects.requireNonNull(json.idList(), "IdList cant be null");
+        Objects.requireNonNull(json.idItem(), "IdItem cant be null");
         DetailList detailList = new DetailList();
         ShoppingList shoppingList = getShoppingListById(json.idList());
         detailList.setShoppingList(shoppingList);
@@ -74,7 +108,7 @@ public class DetailService implements CrudRestOperations<JsonDetail> {
 
     @Override
     public void restUpdate(JsonDetail json) {
-        Objects.requireNonNull(json.id(),"Id cant be null");
+        Objects.requireNonNull(json.id(), "Id cant be null");
         Item item;
         DetailList detailList = detailListRepository.findById(json.id()).orElseThrow(() -> new ApplicationBusinessException("There is no detail with " + "the id " + json.id()));
         if (Objects.nonNull(json.idItem())) {
@@ -100,11 +134,8 @@ public class DetailService implements CrudRestOperations<JsonDetail> {
     @Override
     @Transactional
     public void restDelete(Long id) {
-        Objects.requireNonNull(id,"Id cant be null");
-        DetailList detailList = detailListRepository.findById(id).orElseThrow(() -> new ApplicationBusinessException(
-                "There is " +
-                "no detail " +
-                 "with the id " + id));
+        Objects.requireNonNull(id, "Id cant be null");
+        DetailList detailList = detailListRepository.findById(id).orElseThrow(() -> new ApplicationBusinessException("There is " + "no detail " + "with the id " + id));
         ShoppingList shoppingList = detailList.getShoppingList();
         detailListRepository.deleteById(id);
         BigDecimal totalPriceList = detailListRepository.getTotalPriceByShoppingList(shoppingList);
