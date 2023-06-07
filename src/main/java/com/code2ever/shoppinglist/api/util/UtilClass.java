@@ -6,8 +6,16 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Application util class
+ *
+ * @author Luis
+ */
 public class UtilClass {
 
+    /**
+     * Util method to get a {@link Field} collection for the passed entity
+     */
     public static <T> Set<Field> getFieldsFromEntity(T entity) {
         Class<?> entityClass = entity.getClass();
         Set<Field> fields = Arrays.stream(entityClass.getDeclaredFields()).collect(Collectors.toSet());
