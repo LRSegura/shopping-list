@@ -1,7 +1,7 @@
-package com.code2ever.shoppinglist.security.config;
+package com.code2ever.shoppinglist.api.security.config;
 
-import com.code2ever.shoppinglist.security.CsrfTokenLogger;
-import com.code2ever.shoppinglist.security.token.CustomCsrfTokenRepository;
+import com.code2ever.shoppinglist.api.security.CsrfTokenLogger;
+import com.code2ever.shoppinglist.api.security.token.CustomCsrfTokenRepository;
 import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -51,8 +51,7 @@ public class SecurityConfig {
         http.httpBasic(Customizer.withDefaults());
         http.addFilterAfter(new CsrfTokenLogger(), CsrfFilter.class);
 //        http.addFilterBefore(new RequestValidationFilter(), BasicAuthenticationFilter.class);
-        http.authorizeHttpRequests((authorize) -> authorize.requestMatchers("/api/auth/**").hasRole("SECURITY"))
-                .authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated());
+        http.authorizeHttpRequests((authorize) -> authorize.requestMatchers("/api/auth/**").hasRole("SECURITY")).authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated());
         http.logout(logout -> logout.logoutUrl("/api/auth/logout").addLogoutHandler(((request, response, authentication) -> {
             try {
                 request.logout();
@@ -64,12 +63,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:63342"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(List.of("Authorization", "X-CSRF-TOKEN", "Content-Type", "x-xsrf-token","Session"));
+        configuration.setAllowedHeaders(List.of("Authorization", "X-CSRF-TOKEN", "Content-Type", "x-xsrf-token", "Session"));
         configuration.setExposedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -80,6 +79,4 @@ public class SecurityConfig {
     CsrfTokenRepository tokenRepository() {
         return new CustomCsrfTokenRepository();
     }
-
-
 }

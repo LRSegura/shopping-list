@@ -8,17 +8,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    Optional<Item> findItemByName(String name);
-
     boolean existsByName(String name);
 
     @Query(value = "SELECT item FROM Item item WHERE item.id NOT IN (SELECT detail.item.id FROM DetailList detail " +
-            "WHERE detail.shoppingList = :shoppingList )" )
+            "WHERE detail.shoppingList = :shoppingList )")
     List<Item> getItemNotInShoppingList(ShoppingList shoppingList);
 
     List<Item> getItemsByCategory(Category category);

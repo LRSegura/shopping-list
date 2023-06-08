@@ -1,4 +1,4 @@
-package com.code2ever.shoppinglist.security.filter;
+package com.code2ever.shoppinglist.api.security.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,7 +9,6 @@ import java.io.IOException;
 
 @Slf4j
 public class RequestValidationFilter implements Filter {
-
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

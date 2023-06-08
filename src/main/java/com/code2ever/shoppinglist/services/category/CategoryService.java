@@ -38,7 +38,7 @@ public class CategoryService implements CrudRestOperations<JsonCategory> {
         Objects.requireNonNull(json.description(),"Description cant be null");
         UtilClass.requireNonBlankString(json.description());
         if (isDuplicatedCategory(json.description())) {
-            throw new ApplicationBusinessException("Category name duplicated");
+            throw new ApplicationBusinessException("Duplicated category name");
         }
         Category category = new Category();
         category.setDescription(json.description());

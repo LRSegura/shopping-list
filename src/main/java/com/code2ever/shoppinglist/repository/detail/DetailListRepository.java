@@ -8,10 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface DetailListRepository extends JpaRepository<DetailList,Long> {
+public interface DetailListRepository extends JpaRepository<DetailList, Long> {
 
     List<DetailList> findDetailListByShoppingList(ShoppingList shoppingList);
 

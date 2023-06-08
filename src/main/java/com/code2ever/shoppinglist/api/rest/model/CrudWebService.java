@@ -17,63 +17,60 @@ import java.util.function.Supplier;
 @Slf4j
 public abstract class CrudWebService<T extends JsonData> {
 
-
     @GetMapping()
     public ResponseEntity<JsonResponse> get() {
-        Supplier<ResponseEntity<JsonResponse>> supplier = () -> {
+        Supplier<ResponseEntity<JsonResponse>> supplierTry = () -> {
             List<? extends JsonData> entities = getCrudRestOperations().restGet();
             JsonDataResponse jsonDataResponse = new JsonDataResponse(entities);
             return ResponseEntity.ok(jsonDataResponse);
         };
-
-        Function<Exception, ResponseEntity<JsonResponse>> function = exception -> executeException(exception, "Error getting entities");
-        return execute(supplier, function);
+        return executeTryCatch(supplierTry, "Error getting entities");
     }
 
     @PostMapping()
     public ResponseEntity<JsonResponse> save(@RequestBody T json) {
-
-        Supplier<ResponseEntity<JsonResponse>> supplier = () -> {
+        Supplier<ResponseEntity<JsonResponse>> supplierTry = () -> {
             getCrudRestOperations().restSave(json);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         };
-
-        Function<Exception, ResponseEntity<JsonResponse>> function = exception -> executeException(exception, "Error saving the entity");
-        return execute(supplier, function);
-
+        return executeTryCatch(supplierTry, "Error saving entity");
     }
 
     @PutMapping()
     public ResponseEntity<JsonResponse> update(@RequestBody T json) {
-        Supplier<ResponseEntity<JsonResponse>> supplier = () -> {
+        Supplier<ResponseEntity<JsonResponse>> supplierTry = () -> {
             getCrudRestOperations().restUpdate(json);
             return ResponseEntity.accepted().build();
         };
-        Function<Exception, ResponseEntity<JsonResponse>> function = exception -> executeException(exception, "Error updating entity");
-        return execute(supplier, function);
+        return executeTryCatch(supplierTry, "Error updating entity");
     }
 
     @DeleteMapping()
     public ResponseEntity<JsonResponse> delete(@QueryParam(value = "id") Long id) {
-        Supplier<ResponseEntity<JsonResponse>> supplier = () -> {
+        Supplier<ResponseEntity<JsonResponse>> supplierTry = () -> {
             getCrudRestOperations().restDelete(id);
             return ResponseEntity.noContent().build();
         };
-        Function<Exception, ResponseEntity<JsonResponse>> function = exception -> executeException(exception, "Error deleting entity");
-        return execute(supplier, function);
+        return executeTryCatch(supplierTry, "Error deleting entity");
     }
 
-    private ResponseEntity<JsonResponse> execute(Supplier<ResponseEntity<JsonResponse>> supplier, Function<Exception, ResponseEntity<JsonResponse>> function) {
+    protected ResponseEntity<JsonResponse> executeTryCatch(Supplier<ResponseEntity<JsonResponse>> supplier, String exceptionMessage) {
+        Function<Exception, ResponseEntity<JsonResponse>> functionCatch = exception -> executeCatchException(exception, exceptionMessage);
+        return executeTryCatch(supplier, functionCatch);
+    }
+
+    protected ResponseEntity<JsonResponse> executeTryCatch(Supplier<ResponseEntity<JsonResponse>> supplier,
+                                                           Function<Exception, ResponseEntity<JsonResponse>> function) {
         try {
             return supplier.get();
         } catch (Exception exception) {
             return function.apply(exception);
         }
     }
-
-    private ResponseEntity<JsonResponse> executeException(Exception exception, String message) {
-        log.error(exception.getClass().getName() + "::" + exception.getMessage());
-        String responseMessage = exception instanceof ApplicationBusinessException ? exception.getMessage() : message;
+    private ResponseEntity<JsonResponse> executeCatchException(Exception exception, String customMessage) {
+        String errorMessage = exception.getClass().getName() + "::" + exception.getMessage();
+        log.error(errorMessage);
+        String responseMessage = exception instanceof ApplicationBusinessException ? exception.getMessage() : customMessage;
         JsonSimpleResponse response = new JsonSimpleResponse(responseMessage);
         return ResponseEntity.internalServerError().body(response);
     }
