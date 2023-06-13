@@ -81,10 +81,6 @@ public class ItemService implements CrudRestOperations<JsonItem> {
         return itemRepository.existsByName(name);
     }
 
-    public List<Category> getItemCategoryList() {
-        return categoryRepository.findAll();
-    }
-
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id).orElseThrow(() -> new ApplicationBusinessException("Dont exist category with id " + id));
     }

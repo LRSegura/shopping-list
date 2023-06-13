@@ -3,14 +3,14 @@ package com.code2ever.shoppinglist.services.detail;
 import com.code2ever.shoppinglist.api.exceptions.ApplicationBusinessException;
 import com.code2ever.shoppinglist.api.rest.detail.JsonAddedDetail;
 import com.code2ever.shoppinglist.api.rest.detail.JsonDetail;
-import com.code2ever.shoppinglist.api.rest.model.JsonData;
 import com.code2ever.shoppinglist.api.rest.model.CrudRestOperations;
-import com.code2ever.shoppinglist.model.item.Item;
+import com.code2ever.shoppinglist.api.rest.model.JsonData;
 import com.code2ever.shoppinglist.model.detail.DetailList;
+import com.code2ever.shoppinglist.model.item.Item;
 import com.code2ever.shoppinglist.model.list.ShoppingList;
+import com.code2ever.shoppinglist.repository.detail.DetailListRepository;
 import com.code2ever.shoppinglist.repository.item.ItemRepository;
 import com.code2ever.shoppinglist.repository.list.ListRepository;
-import com.code2ever.shoppinglist.repository.detail.DetailListRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,11 +43,11 @@ public class DetailService implements CrudRestOperations<JsonDetail> {
     }
 
     public List<? extends JsonData> getDetailToBuy(Long idList) {
-        return getDetail(idList,false);
+        return getDetail(idList, false);
     }
 
     public List<? extends JsonData> getDetailBought(Long idList) {
-        return getDetail(idList,true);
+        return getDetail(idList, true);
     }
 
     private List<? extends JsonData> getDetail(Long idList, Boolean bought) {
@@ -60,21 +60,21 @@ public class DetailService implements CrudRestOperations<JsonDetail> {
         return listRepository.findById(id).orElseThrow(() -> new ApplicationBusinessException("There is no list with " + "the id " + id));
     }
 
-    public void buyDetail(Long idDetail){
-        checkDetailAsBought(idDetail,true);
+    public void buyDetail(Long idDetail) {
+        checkDetailAsBought(idDetail, true);
     }
 
-    public void cancelBuyDetail(Long idDetail){
-        checkDetailAsBought(idDetail,false);
+    public void cancelBuyDetail(Long idDetail) {
+        checkDetailAsBought(idDetail, false);
     }
 
-    private void checkDetailAsBought(Long idDetail, Boolean isCheck){
+    private void checkDetailAsBought(Long idDetail, Boolean isCheck) {
         DetailList detailList = getDetailById(idDetail);
         detailList.setBought(isCheck);
         detailListRepository.save(detailList);
     }
 
-    private DetailList getDetailById(Long id){
+    private DetailList getDetailById(Long id) {
         return detailListRepository.findById(id).orElseThrow(() -> new ApplicationBusinessException("There is no Detail " +
                 "with" +
                 "the id " + id));

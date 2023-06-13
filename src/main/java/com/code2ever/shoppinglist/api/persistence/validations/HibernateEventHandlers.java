@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 
 /**
- * Hibernate Listener to inject the value to the field that has the {@link InjectedDate} annotation. *
+ * Hibernate Listener to inject the value to the field that has the {@link InjectedDate} annotation.
  *
  * @author Luis
  */
